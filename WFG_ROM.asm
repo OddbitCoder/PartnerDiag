@@ -532,7 +532,7 @@ sporocilo_testing_memory:
 
 ; To je v resnici IVT, ki kazxe tudi na FDC handler na 4CA
 ivt:
-	DW	$04CA, $05D6, $0524
+	DW	FDCIntHandler, CTCIntHandler, NeznanIntHandler
 
 ; ----------------------------------------
 
