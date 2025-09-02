@@ -87,10 +87,12 @@ IzpisiHex8:
 	RET
 IzpisiHex4:
 	CP	0x0A
-	JP	M,0x0099
+	JP	M,x0099
 	ADD	A,0x37
-	JR	0x009B
+	JR	x009B
+x0099:
 	ADD	A,0x30
+x009B:
 	CALL	GDPUkaz
 	RET
 
@@ -123,9 +125,10 @@ GDPUkaz:
 
 CakajGDP:
 	PUSH	AF
+x00B3:
 	IN	A,(0x20)
 	AND	0x04
-	JR	Z,0x00B3
+	JR	Z,x00B3
 	POP	AF
 	RET
 
@@ -150,10 +153,10 @@ PrelomVrstice:
 	OUT	(0x36),A
 	PUSH	HL
 ; Izbrisxemo novo vrstico.
-	LD	HL,0x00DE
+	LD	HL,niz_premakni_pero_spodnji_levi_kot
 	CALL	IzpisiNiz
 ; Premaknemo pero na levo.
-	LD	HL,0x00F3
+	LD	HL,niz_premakni_pero_skrajno_levo
 	CALL	IzpisiNiz
 	POP	HL
 ; Izberemo nacxin risanja.
@@ -163,7 +166,7 @@ PrelomVrstice:
 ; ----------------------------------------
 
 ; Niz ukazov za GDP, ki premakne pero v spodnji levi kot in pobrisxe vrstico.
-
+niz_premakni_pero_spodnji_levi_kot:
 	DB	$03, $00, $05, $01, $0B, $0B, $0B, $0B
 	DB	$0B, $0B, $0B, $0B, $0B, $0B, $0B, $0B
 	DB	$0B, $0B, $0B, $0B, $00
@@ -171,7 +174,7 @@ PrelomVrstice:
 ; ----------------------------------------
 
 ; Niz ukazov za GDP, ki premakne pero na skrajno levo.
-
+niz_premakni_pero_skrajno_levo:
 	DB	$21, $00, $0D, $00
 
 ; ----------------------------------------
@@ -179,39 +182,41 @@ PrelomVrstice:
 ; Vstopna tocxka v memory test.
 
 MemoryTest:
-	LD	HL,0x02D1
+	LD	HL,sporocilo_testing_memory
 	CALL	IzpisiPrelomInNiz
 	LD	HL,0x2000
 	LD	BC,0xFF80
 	LD	D,0x02
 	LD	A,0x00
+x0107:
 	PUSH	DE
 	PUSH	AF
-	CALL	0x0114
+	CALL	x0114
 	POP	AF
 	POP	DE
 	ADD	A,0x55
 	DEC	D
-	JR	NZ,0x0107
+	JR	NZ,x0107
 	RET
 
 ; ----------------------------------------
-
-	CALL	0x0125
+x0114:
+	CALL	x0125
 	OUT	(0x90),A
-	CALL	0x0125
-	CALL	0x0138
+	CALL	x0125
+	CALL	x0138
 	OUT	(0x88),A
-	CALL	0x0138
+	CALL	x0138
 	RET
 
 ; ----------------------------------------
-
+x0125:
 	PUSH	AF
 	PUSH	HL
 	LD	D,A
 	CPL
 	LD	E,A
+x012A:
 	LD	(HL),D
 	INC	HL
 	LD	(HL),E
@@ -220,42 +225,44 @@ MemoryTest:
 	OR	A
 	SBC	HL,BC
 	POP	HL
-	JR	C,0x012A
+	JR	C,x012A
 	POP	HL
 	POP	AF
 	RET
 
 ; ----------------------------------------
-
+x0138:
 	PUSH	HL
 	PUSH	AF
 	LD	D,A
 	CPL
 	LD	E,A
+x013D:
 	LD	A,(HL)
 	CP	D
-	JR	NZ,0x0151
+	JR	NZ,x0151
 	INC	HL
 	LD	A,(HL)
 	CP	E
-	JR	NZ,0x0151
+	JR	NZ,x0151
 	INC	HL
 	PUSH	HL
 	OR	A
 	SBC	HL,BC
 	POP	HL
-	JR	C,0x013D
+	JR	C,x013D
 	POP	AF
 	POP	HL
 	RET
-	LD	HL,0x015A
+x0151:
+	LD	HL,sporocilo_memory_error
 	CALL	IzpisiPrelomInNiz
 	JP	UkaznaVrstica
 
 ; ----------------------------------------
 
 ; Sporocxilo o neuspelem memory testu.
-
+sporocilo_memory_error:
 	DB	$21, $00
 	DB	"MEMORY ERROR !!!"
 	DB	$00
@@ -304,19 +311,19 @@ Zacetek:
 
 ; Inicializacija SIO "CRT" kanala (za tipkovnico)
 	LD	C,0xD9
-	LD	HL,0x02B6
+	LD	HL,niz_init_ser
 	LD	B,0x07
 	OTIR
 
 ; Inicializacija SIO "LPT" kanala
 	LD	C,0xDB
-	LD	HL,0x02B6
+	LD	HL,niz_init_ser
 	LD	B,0x07
 	OTIR
 
 ; Inicializacija SIO "VAX" kanala
 	LD	C,0xE1
-	LD	HL,0x02B6
+	LD	HL,niz_init_ser
 	LD	B,0x07
 	OTIR
 
@@ -326,21 +333,21 @@ Zacetek:
 	LD	A,0x64
 	OUT	(0x2B),A
 
-	LD	HL,0x02BD
+	LD	HL,sporocilo_zagon
 	CALL	IzpisiPrelomInNiz
 
 ; Spet postavimo pero na levi rob.
 	LD	A,0x05
 	CALL	GDPUkaz
 
-	LD	HL,0x022D
+	LD	HL,sporocilo_boot
 	CALL	IzpisiPrelomInNiz
 
 	CALL	MemoryTest
 
 	CALL	FDCInit
 
-	CALL	0x02EE
+	CALL	ret
 
 	IN	A,(0xD9)
 	AND	0x01	; Je na voljo znak na tipkovnici?
@@ -348,14 +355,14 @@ Zacetek:
 	CALL	BeriInIzpisiZnak
 	CP	0x03	; Je CTL+C?
 	JP	NZ,HDBootSkok
-	LD	HL,0x01FC
+	LD	HL,sporocilo_interrupted
 	CALL	IzpisiPrelomInNiz
 	JP	UkaznaVrstica
 
 ; ----------------------------------------
 
 ; Sporocxilo o prekinjenem zagonu.
-
+sporocilo_interrupted:
 	DB	$21, $00
 	DB	"Interrupted"
 	DB	$2C
@@ -365,7 +372,7 @@ Zacetek:
 ; ----------------------------------------
 
 ; Niz z verzijo programa.
-
+sporocilo_boot:
 	DB	$21, $00
 	DB	"[ Boot V 1.1 - WF ]"
 	DB 	$00
@@ -396,20 +403,22 @@ IzpisiNiz:
 	LD	A,(HL)
 	OUT	(0x22),A
 	INC	HL
+x0251:
 	LD	A,(HL)
 	OR	A
 	RET	Z
 	CALL	GDPUkaz
 	INC	HL
-	JR	0x0251
+	JR	x0251
 
 ; ----------------------------------------
 
 Zakasnitev:
 	PUSH	BC
 	LD	B,0xFF
+x025D:
 	NOP
-	DJNZ	0x025D
+	DJNZ	x025D
 	POP	BC
 	RET
 
@@ -421,7 +430,7 @@ AVDCInit1:
 	CALL	Zakasnitev
 	CALL	Zakasnitev
 	CALL	Zakasnitev
-	LD	HL,0x02AC
+	LD	HL,niz_init_avdc
 	XOR	A
 
 ; SS1 := 0
@@ -487,20 +496,20 @@ AVDCNastaviDispAddr:
 ; ----------------------------------------
 
 ; Inicializacijski niz za AVDC.
-
+niz_init_avdc:
 	DB	$D0, $2F, $0D, $05, $99, $4F, $0A, $EA
 	DB	$00, $30
 
 ; ----------------------------------------
 
 ; Inicializacijski niz za serijska vrata.
-
+niz_init_ser:
 	DB	$18, $04, $44, $03, $C1, $05, $68
 
 ; ----------------------------------------
 
 ; Zagonsko sporocxilo.
-
+sporocilo_zagon:
 	DB	$A8, $00
 	DB	"Delta Partner GDP"
 	DB 	$00
@@ -508,7 +517,7 @@ AVDCNastaviDispAddr:
 ; ----------------------------------------
 
 ; Sporocxilo o testiranju spomina.
-
+sporocilo_testing_memory:
 	DB	$21, $00
 	DB	"TESTING MEMORY ... "
 	DB 	$00
@@ -521,15 +530,14 @@ AVDCNastaviDispAddr:
 
 ; ----------------------------------------
 
-; ???
 ; To je v resnici IVT, ki kazxe tudi na FDC handler na 4CA
-
+ivt:
 	DW	$04CA, $05D6, $0524
 
 ; ----------------------------------------
 
 ; Prazna funkcija; verjetno se je pogojno uporabljala med razvojem.
-
+ret:
 	RET
 
 ; ----------------------------------------
@@ -543,7 +551,7 @@ AVDCNastaviDispAddr:
 
 ; Nerabljen skok.
 
-	JP	0x04CE
+	JP	x04CE
 
 ; ----------------------------------------
 
@@ -554,7 +562,7 @@ HDBootSkok:
 
 ; Nerabljen skok.
 
-	JP	0x05A7
+	JP	x05A7
 
 ; ----------------------------------------
 
@@ -566,7 +574,7 @@ FDBootSkok:
 FDCInit:
 	DI
 	IM	2
-	LD	HL,0x02E8
+	LD	HL,ivt
 	LD	A,L
 	OUT	(0xE8),A
 	OUT	(0xC8),A
@@ -575,11 +583,11 @@ FDCInit:
 	EI
 	HALT
 	LD	A,0x08
-	CALL	0x0337
-	CALL	0x0345
-	CALL	0x0345
+	CALL	x0337
+	CALL	x0345
+	CALL	x0345
 	LD	A,0x03
-	CALL	0x0337
+	CALL	x0337
 	LD	A,0x0D
 	AND	0x0F
 	RLCA
@@ -590,92 +598,97 @@ FDCInit:
 	LD	A,0x0E
 	AND	0x0F
 	OR	B
-	CALL	0x0337
+	CALL	x0337
 	LD	A,0x04
 	RLCA
 	AND	0xFE
-	CALL	0x0337
+	CALL	x0337
 	RET
 
 ; ----------------------------------------
-
+x0337:
 	PUSH	AF
+x0338:
 	IN	A,(0xF0)
 	AND	0xC0
 	CP	0x80
-	JP	NZ,0x0338
+	JP	NZ,x0338
 	POP	AF
 	OUT	(0xF1),A
 	RET
 
 ; ----------------------------------------
-
+x0345:
 	IN	A,(0xF0)
 	AND	0xC0
 	CP	0xC0
-	JP	NZ,0x0345
+	JP	NZ,x0345
 	IN	A,(0xF1)
 	RET
 
 ; ----------------------------------------
-
+x0351:
 	LD	A,0x07
-	CALL	0x0337
+	CALL	x0337
 	LD	A,(Neznano1)
-	CALL	0x0337
+	CALL	x0337
 	EI
 	HALT
 	LD	A,0x08
-	CALL	0x0337
-	CALL	0x0345
-	CALL	0x0345
+	CALL	x0337
+	CALL	x0345
+	CALL	x0345
 	XOR	A
 	LD	(Neznano2),A
 	LD	(Neznano6),A
 	RET
 
 ; ----------------------------------------
-
-	CALL	0x03ED
+x0371:
+	CALL	x03ED
 	RET	NZ
 	LD	A,0x0A
 	LD	(Neznano5),A
+x037A:
 	LD	A,0x05
 	OUT	(0xC0),A
 	LD	A,0xCF
 	OUT	(0xC0),A
-	CALL	0x045C
-	LD	HL,0x046E
+	CALL	x045C
+	LD	HL,niz_init_fdc
 	OTIR
 	LD	A,0x06
 	OR	0x40
-	CALL	0x042A
-	CALL	0x0446
+	CALL	x042A
+	CALL	x0446
+x0394:
 	EI
 	HALT
-	JP	C,0x03AB
+	JP	C,x03AB
 	IN	A,(0x98)
 	AND	0x01
-	JP	NZ,0x0394
-	LD	HL,0x0529
+	JP	NZ,x0394
+	LD	HL,sporocilo_floppy_disk_not_ready
 	CALL	IzpisiPrelomInNiz
 	OUT	(0x98),A
-	JP	0x0394
+	JP	x0394
+x03AB:
 	LD	A,0x03
 	OUT	(0xCA),A
-	CALL	0x0345
-	CALL	0x0345
+	CALL	x0345
+	CALL	x0345
 	PUSH	AF
 	LD	B,0x05
-	CALL	0x0345
+x03B8:
+	CALL	x0345
 	DEC	B
-	JP	NZ,0x03B8
+	JP	NZ,x03B8
 	POP	AF
 	CP	0x80
 	RET	Z
 	LD	A,(Neznano5)
 	OR	A
-	JP	Z,0x03EB
+	JP	Z,x03EB
 	DEC	A
 	LD	(Neznano5),A
 	LD	A,(Neznano2)
@@ -684,43 +697,45 @@ FDCInit:
 	LD	(Neznano2),A
 	LD	A,(Neznano6)
 	PUSH	AF
-	CALL	0x03ED
+	CALL	x03ED
 	POP	AF
 	LD	(Neznano6),A
 	POP	AF
 	LD	(Neznano2),A
-	CALL	0x03ED
-	JP	0x037A
+	CALL	x03ED
+	JP	x037A
+x03EB:
 	INC	A
 	RET
 
 ; ----------------------------------------
-
-	CALL	0x0501
+x03ED:
+	CALL	x0501
 	LD	A,0x0F
-	CALL	0x0337
-	CALL	0x041B
-	CALL	0x0337
+	CALL	x0337
+	CALL	x041B
+	CALL	x0337
 	LD	A,(Neznano2)
-	CALL	0x0337
+	CALL	x0337
 	EI
 	HALT
 	LD	A,0x08
-	CALL	0x0337
-	CALL	0x0345
-	CALL	0x0345
+	CALL	x0337
+	CALL	x0345
+	CALL	x0345
 	LD	B,A
 	LD	A,(Neznano2)
 	CP	B
-	JP	Z,0x0419
+	JP	Z,x0419
 	XOR	A
 	INC	A
 	RET
+x0419:
 	XOR	A
 	RET
 
 ; ----------------------------------------
-
+x041B:
 	LD	A,(Neznano6)
 	RLCA
 	RLCA
@@ -733,32 +748,32 @@ FDCInit:
 	RET
 
 ; ----------------------------------------
-
-	CALL	0x0337
-	CALL	0x041B
-	CALL	0x0337
+x042A:
+	CALL	x0337
+	CALL	x041B
+	CALL	x0337
 	LD	A,(Neznano2)
-	CALL	0x0337
+	CALL	x0337
 	LD	A,(Neznano6)
-	CALL	0x0337
+	CALL	x0337
 	LD	A,(Neznano4)
-	CALL	0x0337
+	CALL	x0337
 	RET
 
 ; ----------------------------------------
-
+x0446:
 	LD	A,0x01
-	CALL	0x0337
+	CALL	x0337
 	LD	A,(Neznano4)
-	CALL	0x0337
+	CALL	x0337
 	LD	A,0x0A
-	CALL	0x0337
+	CALL	x0337
 	LD	A,0xFF
-	CALL	0x0337
+	CALL	x0337
 	RET
 
 ; ----------------------------------------
-
+x045C:
 	LD	A,0x79
 	OUT	(0xC0),A
 	LD	HL,(Neznano3)
@@ -773,7 +788,7 @@ FDCInit:
 ; ----------------------------------------
 
 ; Init string za FDC???
-
+niz_init_fdc:
 	DB	$FF, $00, $14, $28, $85, $F1, $8A, $CF
 	DB	$01, $CF, $87, $FF, $00, $14, $28, $85
 	DB	$F1, $8A, $CF, $05, $CF, $87
@@ -785,15 +800,17 @@ FDNaloziCPMLDR:
 	LD	(Neznano7),A
 	XOR	A
 	LD	(Neznano1),A
-	CALL	0x0351
+	CALL	x0351
 	LD	HL,0xE000
 	LD	(Neznano3),HL
+x0496:
 	XOR	A
 	INC	A
 	LD	(Neznano4),A
-	CALL	0x0371
-	JP	NZ,0x06D1
-	LD	DE,0x0100
+x049B:
+	CALL	x0371
+	JP	NZ,x06D1
+	LD	DE,0x0100 ; NI NASLOV
 	LD	HL,(Neznano3)
 	ADD	HL,DE
 	LD	(Neznano3),HL
@@ -802,7 +819,7 @@ FDNaloziCPMLDR:
 	LD	(Neznano4),A
 	LD	HL,0xFFD8
 	CP	(HL)
-	JP	NZ,0x049B
+	JP	NZ,x049B
 	LD	A,(Neznano6)
 	OR	A
 	RET	NZ
@@ -810,7 +827,7 @@ FDNaloziCPMLDR:
 	LD	(Neznano6),A
 	LD	A,0x0E
 	LD	(Neznano7),A
-	JP	0x0496
+	JP	x0496
 
 ; ----------------------------------------
 
@@ -823,7 +840,7 @@ FDCIntHandler:
 
 ; Sem skocxi procedura na 02F1, ki ni nikoli klicana, torej tudi
 ; to ni nikoli klicano.
-
+x04CE:
 	CALL	FDNaloziCPMLDR
 	JP	UkaznaVrstica
 
@@ -833,39 +850,43 @@ FDBoot:
 	CALL	FDNaloziCPMLDR
 	LD	A,(CPMLDR)	; Prvi bajt prvega sektorja...
 	CP	0xC3	; ... mora biti opcode za brezpogojni JP...
-	JP	Z,0x04EA
+	JP	Z,x04EA
 	CP	0x31	; ... ali LD SP, nn
-	JP	Z,0x04EA
-	LD	HL,0x0593
+	JP	Z,x04EA
+	LD	HL,sporocilo_no_system_on_disk
 	JP	Napaka
 
 ; Nalagalnik OSa je nalozxen; skocximo vanj
+x04EA:
 	JP	Trampolin
 
 ; ----------------------------------------
-
+x04ED:
 	IN	A,(0x98)
 	AND	0x01
 	RET
 
 ; ----------------------------------------
-
+x04F2:
 	LD	A,0xFF
 	PUSH	BC
+x04F5:
 	LD	B,0xFF
+x04F7:
 	DEC	B
-	JP	NZ,0x04F7
+	JP	NZ,x04F7
 	DEC	A
-	JP	NZ,0x04F5
+	JP	NZ,x04F5
 	POP	BC
 	RET
 
 ; ----------------------------------------
-
-	CALL	0x04ED
-	JP	NZ,0x050C
+x0501:
+	CALL	x04ED
+	JP	NZ,x050C
 	OUT	(0x98),A
-	CALL	0x04F2
+	CALL	x04F2
+x050C:
 	XOR	A
 	OUT	(0x98),A
 	LD	A,0x47
@@ -891,7 +912,7 @@ NeznanIntHandler:
 ; ----------------------------------------
 
 ; Sporocxilo, da disketni pogon ni pripravljen.
-
+sporocilo_floppy_disk_not_ready:
 	DB	$21, $00
 	DB	"FLOPPY DISK NOT READY !!!!"
 	DB	$00
@@ -902,20 +923,20 @@ HDBoot:
 	CALL	HDNaloziCPMLDR
 	LD	A,(CPMLDR)	; Prvi bajt prvega sektorja...
 	CP	0x31	; ... mora biti opcode za LD SP, nn
-	JP	Z,0x0557
-	LD	HL,0x0593
+	JP	Z,x0557
+	LD	HL,sporocilo_no_system_on_disk
 	JP	Napaka
-
+x0557:
 ; Kopiramo ROM na 2000h
-	LD	HL,0x0000
+	LD	HL,0x0000 ; NI NASLOV
 	LD	DE,0x2000
-	LD	BC,0x0800
+	LD	BC,0x0800 ; NI NASLOV
 	LDIR
 
 ; Kopiramo interrupt handler(?)
-	LD	HL,0x0761
+	LD	HL,ivt_2
 	LD	DE,0xC000
-	LD	BC,0x006C
+	LD	BC,0x006C ; NI NASLOV
 	LDIR
 
 	DI
@@ -944,7 +965,7 @@ HDBoot:
 ; ----------------------------------------
 
 ; Sporocxilo, da trdi disk ni zagonski.
-
+sporocilo_no_system_on_disk:
 	DB	$21, $00
 	DB	"NO SYSTEM ON DISK"
 	DB	$00
@@ -953,12 +974,12 @@ HDBoot:
 
 ; Sem skocxi procedura na 02F7, ki ni nikoli klicana, torej tudi
 ; to ni nikoli klicano.
-
+x05A7:
 	CALL	HDNaloziCPMLDR
 	JP	UkaznaVrstica
 
 ; ----------------------------------------
-
+x05AD:
 	XOR	A
 	OUT	(0x12),A
 	DI
@@ -971,11 +992,12 @@ HDBoot:
 	LD	A,0x50
 	OUT	(0xC9),A
 	EI
-	CALL	0x05FC
-	LD	HL,0x0755
-	CALL	0x063D
-	CALL	0x0662
-	JP	NZ,0x05C5
+	CALL	x05FC
+x05C5:
+	LD	HL,x0755
+	CALL	x063D
+	CALL	x0662
+	JP	NZ,x05C5
 	LD	A,0x03
 	OUT	(0xC9),A
 	RET
@@ -987,7 +1009,7 @@ CTCIntHandler:
 	OUT	(0xC9),A
 	CALL	IzvediRETI
 	EI
-	LD	HL,0x05E6
+	LD	HL,sporocilo_hard_disk_not_ready
 	JP	Napaka
 
 ; ----------------------------------------
@@ -998,49 +1020,53 @@ IzvediRETI:
 ; ----------------------------------------
 
 ; Sporocxilo, da trdi disk ni pripravljen.
-
+sporocilo_hard_disk_not_ready:
 	DB	$21, $00
 	DB	"HARD DISK NOT READY"
 	DB	$00
 
 ; ----------------------------------------
-
-	LD	HL,0x0747
-	CALL	0x0652
-	CALL	0x0662
+x05FC:
+	LD	HL,x0747
+	CALL	x0652
+	CALL	x0662
 	RET	Z
 	LD	A,0x34
-	JP	0x06D7
+	JP	x06D7
 
 ; ----------------------------------------
 
 HDNaloziCPMLDR:
-	CALL	0x05AD
+	CALL	x05AD
 	LD	A,0xC3
 	OUT	(0xC0),A
-	LD	HL,0x075B
-	CALL	0x063D
+	LD	HL,x075B
+	CALL	x063D
+x0618:
 	IN	A,(0x10)
 	AND	0x40
-	JP	Z,0x0618
+	JP	Z,x0618
 	IN	A,(0x10)
 	AND	0x10
-	JP	NZ,0x0634
+	JP	NZ,x0634
 	LD	A,0x22
 	OUT	(0x10),A
-	CALL	0x06A9
+	CALL	x06A9
+x062D:
 	IN	A,(0x10)
 	AND	0x10
-	JP	Z,0x062D
-	CALL	0x0662
+	JP	Z,x062D
+x0634:
+	CALL	x0662
 	RET	Z
 	LD	A,0x32
-	JP	0x06D7
+	JP	x06D7
 
 ; ----------------------------------------
-
-	CALL	0x067F
-	CALL	0x069B
+x063D:
+	CALL	x067F
+x0640:
+	CALL	x069B
 	LD	B,A
 	AND	0x10
 	RET	Z
@@ -1050,30 +1076,32 @@ HDNaloziCPMLDR:
 	LD	A,(HL)
 	OUT	(0x11),A
 	INC	HL
-	JP	0x0640
+	JP	x0640
 
 ; ----------------------------------------
-
-	CALL	0x067F
-	CALL	0x069B
+x0652:
+	CALL	x067F
+x0655:
+	CALL	x069B
 	AND	0x40
 	RET	NZ
 	LD	A,(HL)
 	OUT	(0x11),A
 	INC	HL
-	JP	0x0655
+	JP	x0655
 
 ; ----------------------------------------
-
-	CALL	0x069B
+x0662:
+	CALL	x069B
 	AND	0x10
-	JP	NZ,0x066F
+	JP	NZ,x066F
 	LD	A,0x42
-	JP	0x06D7
+	JP	x06D7
+x066F:
 	IN	A,(0x11)
 	LD	B,A
 	INC	HL
-	CALL	0x069B
+	CALL	x069B
 	IN	A,(0x11)
 	XOR	A
 	OUT	(0x10),A
@@ -1082,37 +1110,40 @@ HDNaloziCPMLDR:
 	RET
 
 ; ----------------------------------------
-
+x067F:
 	IN	A,(0x10)
 	AND	0x08
-	JP	Z,0x068B
+	JP	Z,x068B
 	LD	A,0x41
-	JP	0x06D7
+	JP	x06D7
+x068B:
 	LD	A,0x01
 	OUT	(0x10),A
+x068F:
 	IN	A,(0x10)
 	AND	0x08
-	JP	Z,0x068F
+	JP	Z,x068F
 	LD	A,0x02
 	OUT	(0x10),A
 	RET
 
 ; ----------------------------------------
-
+x069B:
 	IN	A,(0x10)
 	RLA
-	JP	NC,0x069B
+	JP	NC,x069B
 	RRA
 	RET
 
 ; ----------------------------------------
-
-	LD	HL,0x06C2
-	JP	0x06AC
+x06A3:
+	LD	HL,niz_init_dma_2
+	JP	x06AC
 
 ; ----------------------------------------
-
-	LD	HL,0x06B3
+x06A9:
+	LD	HL,niz_init_dma
+x06AC:
 	LD	C,0xC0
 	LD	B,0x0F
 	OTIR
@@ -1121,22 +1152,23 @@ HDNaloziCPMLDR:
 ; ----------------------------------------
 
 ; ??? init string za DMA
-
+niz_init_dma:
 	DB	$79, $00, $E0, $FF, $1E, $14, $28, $95
 	DB	$11, $00, $8A, $CF, $01, $CF, $87
 
 ; ----------------------------------------
 
 ; ??? init string za DMA
-
+niz_init_dma_2:
 	DB	$79, $00, $E0, $FF, $1E, $14, $28, $95
 	DB	$11, $00, $8A, $CF, $05, $CF, $87
 
 ; ----------------------------------------
-
-	LD	HL,0x06E0
+x06D1:
+	LD	HL,sporocilo_floppy_disk_malfunction
 	JP	Napaka
-	LD	HL,0x0714
+x06D7:
+	LD	HL,sporocilo_hard_disk_malfunction
 Napaka:
 	CALL	IzpisiPrelomInNiz
 	JP	UkaznaVrstica
@@ -1144,7 +1176,7 @@ Napaka:
 ; ----------------------------------------
 
 ; Sporocxilo, da je nekaj narobe z disketnim pogonom.
-
+sporocilo_floppy_disk_malfunction:
 	DB	$21, $00
 	DB	"FLOPPY DISK MALFUNCTION !!!RETRY WITH COMMAND  F "
 	DB 	$00
@@ -1152,7 +1184,7 @@ Napaka:
 ; ----------------------------------------
 
 ; Sporocxilo, da je nekaj narobe s trdim diskom.
-
+sporocilo_hard_disk_malfunction:
 	DB	$21, $00
 	DB	"HARD DISK MALFUNCTION >>> RETRY WITH COMMAND  A "
 	DB	$00
@@ -1160,16 +1192,22 @@ Napaka:
 ; ----------------------------------------
 
 ; ???
-
-	DB	$0C, $00, $00, $00, $00, $00, $01, $32
-	DB	$04, $00, $80, $00, $40, $0B, $01, $00
-	DB	$00, $00, $00, $00, $08, $00, $00, $00
+x0747:
+	DB	$0C, $00, $00, $00
+	DB	$00, $00, $01, $32
+	DB	$04, $00, $80, $00
+	DB	$40, $0B
+x0755:
+	DB	$01, $00
+	DB	$00, $00, $00, $00
+x075B:
+	DB	$08, $00, $00, $00
 	DB	$1F, $00
 
 ; ----------------------------------------
 
 ; IVT z 2 vnosoma za ???, ki kazxeta na rutino spodaj, ko je prekopirana.
-
+ivt_2:
 	DW	$C004, $C004
 
 ; ----------------------------------------
@@ -1182,10 +1220,10 @@ Napaka:
 	OUT	(0xC9),A
 	OUT	(0x88),A
 	LD	HL,0x2000
-	LD	DE,0x0000
-	LD	BC,0x0800
+	LD	DE,0x0000 ; NI NASLOV
+	LD	BC,0x0800 ; NI NASLOV
 	LDIR
-	LD	HL,0x02E8
+	LD	HL,ivt
 	LD	A,L
 	OUT	(0xE8),A
 	OUT	(0xC8),A
@@ -1193,13 +1231,13 @@ Napaka:
 	LD	I,A
 	EI
 	CALL	IzvediRETI
-	LD	HL,0x078E
+	LD	HL,sporocilo_loading_error
 	JP	IzpisiPrelomInNiz
 
 ; ----------------------------------------
 
 ; Sporocxilo o napaki pri nalaganju s trdega diska, ki se nikoli ne izpisxe?
-
+sporocilo_loading_error:
 	DB	$11, $00
 	DB	"LOADING ERROR FROM HARD DISK TRY TO LOAD SYSTEM FROM FLOPPY "
 	DB	$00
