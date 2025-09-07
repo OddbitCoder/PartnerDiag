@@ -9,9 +9,6 @@
 	Neznano6 equ FFD7h
 	Neznano7 equ FFD8h
 
-; Partner WF/G ROM disassembly (delo v izdelavi)
-; Matej Horvat
-
 ; ----------------------------------------
 
 	ORG	$0
@@ -22,46 +19,7 @@
 
 ; ----------------------------------------
 
-; Ukazna vrstica, kjer uporabnik lahko izbere zagon z diskete
-; ali s trdega diska.
-
-UkaznaVrstica:
-	LD	SP,0xFFC0
-	CALL	PrelomVrstice
-	LD	A,0x2A	; '*'
-	CALL	GDPUkaz
-	CALL	BeriInIzpisiZnak
-	AND	0xDF	; Pretvori v uppercase
-	CP	0x41	; 'A'
-	JP	Z,HDBootSkok
-	CP	0x46	; 'F'
-	JP	Z,FDBootSkok
-NeznanUkaz:
-	LD	A,0x3F	; '?'
-	CALL	GDPUkaz
-	JR	UkaznaVrstica
-
-; ----------------------------------------
-
-; Nerabljeni nicxelni bajti oz. NOP-i.
-
-	DB	$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
-	DB	$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
-	DB	$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
-	DB	$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
-	DB	$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
-	DB	$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
-	DB	$00,$00,$00,$00,$00,$00
-
-; ----------------------------------------
-
-; Nerabljen skok.
-
-	JP	NeznanUkaz
-
-; ----------------------------------------
-
-; Nerabljene procedure za izpis sxestnajstisxkih sxtevil.
+; Procedure za izpis sxestnajstisxkih sxtevil.
 
 IzpisiHex16:
 	CALL	PrelomVrstice
@@ -134,14 +92,6 @@ x00B3:
 
 ; ----------------------------------------
 
-; Nerabljena procedura, ki izpisxe presledek na GDP.
-
-IzpisiPresledek:
-	LD	A,0x20
-	JR	GDPUkaz
-
-; ----------------------------------------
-
 ; Izvede prelom vrstice.
 
 ; Pomaknemo vsebino zaslona 12 pikslov navzgor.
@@ -181,96 +131,233 @@ niz_premakni_pero_skrajno_levo:
 
 ; Vstopna tocxka v memory test.
 
+AddrBusTest:
+	START_ADDR      EQU 2000h
+	END_HI          EQU 0FFh
+	END_LO_STOP     EQU 081h            ; stop when L reaches 81h in FFxx page
+
+ADDR_BUS_TEST:
+    ; Fill background with 00h
+    LD      HL,START_ADDR
+FILL_LOOP:
+    XOR     A
+    LD      (HL),A
+    INC     HL
+    LD      A,H
+    CP      END_HI
+    JR      C,FILL_LOOP
+    LD      A,L
+    CP      END_LO_STOP
+    JR      C,FILL_LOOP
+
+    ; Masks: 0001h << k up to 8000h (tests A0..A15 relative to base)
+    LD      BC,0001h                ; B=high, C=low mask
+MASK_LOOP:
+    ; DE = probe = 2000h OR BC   (always within 2000h..FFFFh)
+    LD      D,20h                   ; START_ADDR high
+    LD      E,00h                   ; START_ADDR low
+    LD      A,E
+    OR      C
+    LD      E,A
+    LD      A,D
+    OR      B
+    LD      D,A                     ; DE = probe
+
+    ; write FF at probe
+    LD      H,D
+    LD      L,E
+    LD      A,0FFh
+    LD      (HL),A
+
+    ; verify whole window: only probe is FF, all others 00
+    LD      HL,START_ADDR
+VERIFY_LOOP:
+    LD      A,H
+    CP      D
+    JR      NZ, NOT_PROBE_ROW
+    LD      A,L
+    CP      E
+    JR      NZ, NOT_PROBE
+    ; HL == DE → expect FF
+    LD      A,(HL)          ; actual
+    CP      0FFh
+    JR      NZ, FAIL_AT_PROBE
+    JR      ADV
+
+NOT_PROBE_ROW:
+NOT_PROBE:
+    LD      A,(HL)          ; actual
+    OR      A               ; compare with 00
+    JR      NZ, FAIL_AT_OTHER
+
+ADV:
+    INC     HL
+    LD      A,H
+    CP      END_HI
+    JR      C, VERIFY_LOOP
+    LD      A,L
+    CP      END_LO_STOP
+    JR      C, VERIFY_LOOP
+
+    ; restore 00 at probe
+    LD      H,D
+    LD      L,E
+    XOR     A
+    LD      (HL),A
+
+    ; next mask: BC <<= 1 ; stop after 8000h processed
+    SLA     C
+    RL      B
+    LD      A,B
+    OR      C
+    JR      NZ, MASK_LOOP
+
+    ; success
+    LD      HL,sporocilo_ok
+    CALL    IzpisiNiz
+    RET
+
+; ------------------------------------------------------------
+; FAIL HANDLERS
+; ------------------------------------------------------------
+
+FAIL_AT_PROBE:
+; HL = probe address
+; DE = probe address (expected location)
+; A  = actual value read (≠ FFh)
+; Expectation was FFh but cell returned something else
+FAIL_AT_OTHER:
+; HL = address being checked (not the probe)
+; DE = probe address (the only one supposed to contain FFh)
+; A  = actual value read (≠ 00h)
+; Expectation was 00h but another cell was corrupted (aliasing)
+	PUSH AF
+	CALL IzpisiHex16 ; HL
+	LD H,D
+	LD L,E
+	CALL IzpisiHex16 ; DE
+	CALL PrelomVrstice
+	POP AF
+	CALL IzpisiHex8 ; A
+    HALT
+
 MemoryTest:
-	LD	HL,sporocilo_testing_memory
-	CALL	IzpisiPrelomInNiz
-	LD	HL,0x2000
-	LD	BC,0xFF80
-	LD	D,0x02
-	LD	A,0x00
-x0107:
-	PUSH	DE
-	PUSH	AF
-	CALL	x0114
-	POP	AF
-	POP	DE
-	ADD	A,0x55
-	DEC	D
-	JR	NZ,x0107
-	RET
+;	START_ADDR      EQU 2000h
+;	END_HI          EQU 0FFh           ; end page high byte
+;	END_LO_STOP     EQU 081h           ; stop when L reaches 81h in FFxx page
+
+; ------------ Pass A: write P = H XOR L ------------
+            LD      HL, START_ADDR
+PA_WRITE:
+            LD      A,H
+            XOR     L
+            XOR     C
+            LD      (HL),A
+
+; range-specific increment/terminate (to FF80 inclusive)
+            INC     HL
+            LD      A,H
+            CP      END_HI          ; H < FF ?
+            JR      C, PA_WRITE     ; yes -> continue
+            ; here H == FF (cannot be > FF)
+            LD      A,L
+            CP      END_LO_STOP     ; L < 81h ?
+            JR      C, PA_WRITE     ; yes -> continue
+            ; else L == 81h -> done writing pass A
+
+; ------------ Pass A: verify P ------------
+            LD      HL, START_ADDR
+PA_VERIFY:
+            LD      A,H
+            XOR     L               ; expected = P
+            XOR     C
+            LD      B,A
+            LD      A,(HL)          ; actual
+            CP      B
+            JR      NZ, FAIL_PA
+
+            ; increment with same range-specific stop
+            INC     HL
+            LD      A,H
+            CP      END_HI
+            JR      C, PA_VERIFY
+            LD      A,L
+            CP      END_LO_STOP
+            JR      C, PA_VERIFY
+            ; done verifying pass A
+
+; ------------ Pass B: write ~P ------------
+            LD      HL, START_ADDR
+PB_WRITE:
+            LD      A,H
+            XOR     L
+            XOR     C
+            CPL                     ; ~P
+            LD      (HL),A
+
+            INC     HL
+            LD      A,H
+            CP      END_HI
+            JR      C, PB_WRITE
+            LD      A,L
+            CP      END_LO_STOP
+            JR      C, PB_WRITE
+            ; done writing pass B
+
+; ------------ Pass B: verify ~P ------------
+            LD      HL, START_ADDR
+PB_VERIFY:
+            LD      A,H
+            XOR     L
+            XOR     C
+            CPL                     ; expected = ~P
+            LD      B,A
+            LD      A,(HL)          ; actual
+            CP      B
+            JR      NZ, FAIL_PB
+
+            INC     HL
+            LD      A,H
+            CP      END_HI
+            JR      C, PB_VERIFY
+            LD      A,L
+            CP      END_LO_STOP
+            JR      C, PB_VERIFY
+
+; ------------ PASS ----------------------
+PASS:
+            LD      HL,sporocilo_ok
+            CALL    IzpisiNiz
+            RET
 
 ; ----------------------------------------
-x0114:
-	CALL	x0125
-	OUT	(0x90),A
-	CALL	x0125
-	CALL	x0138
-	OUT	(0x88),A
-	CALL	x0138
-	RET
-
-; ----------------------------------------
-x0125:
-	PUSH	AF
-	PUSH	HL
-	LD	D,A
-	CPL
-	LD	E,A
-x012A:
-	LD	(HL),D
-	INC	HL
-	LD	(HL),E
-	INC	HL
-	PUSH	HL
-	OR	A
-	SBC	HL,BC
-	POP	HL
-	JR	C,x012A
-	POP	HL
-	POP	AF
-	RET
-
-; ----------------------------------------
-x0138:
-	PUSH	HL
-	PUSH	AF
-	LD	D,A
-	CPL
-	LD	E,A
-x013D:
-	LD	A,(HL)
-	CP	D
-	JR	NZ,x0151
-	INC	HL
-	LD	A,(HL)
-	CP	E
-	JR	NZ,x0151
-	INC	HL
-	PUSH	HL
-	OR	A
-	SBC	HL,BC
-	POP	HL
-	JR	C,x013D
-	POP	AF
-	POP	HL
-	RET
-x0151:
-	LD	HL,sporocilo_memory_error
-	CALL	IzpisiPrelomInNiz
-	JP	UkaznaVrstica
-
-; ----------------------------------------
-
-; Sporocxilo o neuspelem memory testu.
-sporocilo_memory_error:
-	DB	$21, $00
-	DB	"MEMORY ERROR !!!"
-	DB	$00
-
-; ----------------------------------------
+; B = expected, A = actual, HL = failing address
+FAIL_PA:
+			PUSH    AF
+			LD      A,'A'
+			CALL    GDPUkaz
+			JR      FAIL_report
+FAIL_PB:
+            PUSH    AF
+            LD      A,'B'
+            CALL    GDPUkaz
+FAIL_report:
+			CALL    PrelomVrstice
+			POP     AF
+			CALL    IzpisiHex8 ; ACTUAL
+			CALL    PrelomVrstice
+			LD      A,B
+			CALL    IzpisiHex8 ; EXPECTED
+			CALL    PrelomVrstice
+			LD      A,C
+			CALL    IzpisiHex8 ; MEMORY BANK
+			CALL	IzpisiHex16 ; FAILING ADDRESS
+			HALT
 
 Zacetek:
 	LD	SP,0xFFC0
+
+	DI
 
 ; Inicializacija PIO
 	LD	A,0x07
@@ -343,11 +430,18 @@ Zacetek:
 	LD	HL,sporocilo_boot
 	CALL	IzpisiPrelomInNiz
 
+	CALL AddrBusTest
+
+	LD	C,0
 	CALL	MemoryTest
+	OUT (0x90),A
+	LD	C,1
+	CALL	MemoryTest
+	OUT (0x88),A	
+
+	HALT
 
 	CALL	FDCInit
-
-	CALL	ret
 
 	IN	A,(0xD9)
 	AND	0x01	; Je na voljo znak na tipkovnici?
@@ -357,7 +451,7 @@ Zacetek:
 	JP	NZ,HDBootSkok
 	LD	HL,sporocilo_interrupted
 	CALL	IzpisiPrelomInNiz
-	JP	UkaznaVrstica
+	HALT
 
 ; ----------------------------------------
 
@@ -524,45 +618,14 @@ sporocilo_testing_memory:
 
 ; ----------------------------------------
 
-; Nerabljen bajt?
-
-	DB	$00
-
-; ----------------------------------------
-
 ; To je v resnici IVT, ki kazxe tudi na FDC handler na 4CA
 ivt:
 	DW	FDCIntHandler, CTCIntHandler, NeznanIntHandler
 
 ; ----------------------------------------
 
-; Prazna funkcija; verjetno se je pogojno uporabljala med razvojem.
-ret:
-	RET
-
-; ----------------------------------------
-
-; Nerabljeno.
-
-	NOP
-	NOP
-
-; ----------------------------------------
-
-; Nerabljen skok.
-
-	JP	x04CE
-
-; ----------------------------------------
-
 HDBootSkok:
 	JP	HDBoot
-
-; ----------------------------------------
-
-; Nerabljen skok.
-
-	JP	x05A7
 
 ; ----------------------------------------
 
@@ -838,14 +901,6 @@ FDCIntHandler:
 
 ; ----------------------------------------
 
-; Sem skocxi procedura na 02F1, ki ni nikoli klicana, torej tudi
-; to ni nikoli klicano.
-x04CE:
-	CALL	FDNaloziCPMLDR
-	JP	UkaznaVrstica
-
-; ----------------------------------------
-
 FDBoot:
 	CALL	FDNaloziCPMLDR
 	LD	A,(CPMLDR)	; Prvi bajt prvega sektorja...
@@ -972,13 +1027,6 @@ sporocilo_no_system_on_disk:
 
 ; ----------------------------------------
 
-; Sem skocxi procedura na 02F7, ki ni nikoli klicana, torej tudi
-; to ni nikoli klicano.
-x05A7:
-	CALL	HDNaloziCPMLDR
-	JP	UkaznaVrstica
-
-; ----------------------------------------
 x05AD:
 	XOR	A
 	OUT	(0x12),A
@@ -1171,7 +1219,7 @@ x06D7:
 	LD	HL,sporocilo_hard_disk_malfunction
 Napaka:
 	CALL	IzpisiPrelomInNiz
-	JP	UkaznaVrstica
+	HALT
 
 ; ----------------------------------------
 
@@ -1240,4 +1288,14 @@ ivt_2:
 sporocilo_loading_error:
 	DB	$11, $00
 	DB	"LOADING ERROR FROM HARD DISK TRY TO LOAD SYSTEM FROM FLOPPY "
+	DB	$00
+
+sporocilo_error:
+	DB	$21, $00
+	DB	"ERROR"
+	DB	$00
+
+sporocilo_ok:
+	DB	$21, $00
+	DB	"OK "
 	DB	$00
