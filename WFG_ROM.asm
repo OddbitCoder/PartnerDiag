@@ -15,7 +15,287 @@
 
 ; ----------------------------------------
 
-	JP	Zacetek
+	DI
+
+; Inicializacija PIO
+	LD	A,0x07
+	OUT	(0x31),A
+	OUT	(0x33),A
+	LD	A,0x0F
+	OUT	(0x31),A
+	OUT	(0x33),A
+
+	LD	A,0x18
+	OUT	(0x30),A
+	LD	A,0x6D
+	OUT	(0x32),A
+	XOR	A
+	OUT	(0x39),A
+	OUT	(0x36),A
+	LD	E,A
+
+; GDP
+	XOR	A
+	OUT	(0x21),A
+
+; Izbira in spust GDP peresa
+	LD	A,0x03
+	OUT	(0x21),A
+
+	LD	A,0x04	; Pocxistimo GDP sliko...
+	LD HL,GDPUkaz_ret_1
+	JP	GDPUkaz2
+GDPUkaz_ret_1:
+	LD	A,0x05	; ...in postavimo pero na levi rob.
+	LD HL,GDPUkaz_ret_2
+	JP	GDPUkaz2
+GDPUkaz_ret_2:
+	XOR	A
+	OUT	(0x39),A
+	OUT	(0x30),A
+
+; Inicializacija AVDC
+	LD	A,0x00
+	OUT	(0x39),A
+	LD HL,Zakasnitev_ret
+	JP	Zakasnitev2
+Zakasnitev_ret:
+	LD	HL,niz_init_avdc
+	XOR	A
+
+; SS1 := 0
+	OUT	(0x3E),A
+	OUT	(0x3F),A
+
+; SS2 := 0
+	OUT	(0x3A),A
+	OUT	(0x3B),A
+
+	LD	A,0x10
+	OUT	(0x39),A
+	LD	B,0x0A
+	LD	C,0x38
+	OTIR
+
+	LD	A,0x3D
+	OUT	(0x39),A
+
+; Naslov AVDC kurzorja := 0
+	XOR	A
+	OUT	(0x3D),A
+	OUT	(0x3C),A
+
+	LD	HL,0x1FFF
+	LD	A,0x1A
+	OUT	(0x39),A
+	LD	A,L
+	OUT	(0x38),A
+	LD	A,H
+	OUT	(0x38),A
+
+; Zapolni AVDC framebuffer s presledki?
+	LD	A,0x20
+	OUT	(0x34),A
+	XOR	A
+	OUT	(0x35),A
+	LD	A,0xBB	; Write from cursor to pointer
+	OUT	(0x39),A
+
+; Inicializacija SIO "CRT" kanala (za tipkovnico)
+	LD	C,0xD9
+	LD	HL,niz_init_ser
+	LD	B,0x07
+	OTIR
+
+; Inicializacija SIO "LPT" kanala
+	LD	C,0xDB
+	LD	HL,niz_init_ser
+	LD	B,0x07
+	OTIR
+
+; Inicializacija SIO "VAX" kanala
+	LD	C,0xE1
+	LD	HL,niz_init_ser
+	LD	B,0x07
+	OTIR
+
+; Y koordinata GDP peresa := 100
+	LD	A,0x64
+	OUT	(0x2B),A
+
+	LD HL,Prelom_ret
+	JP PrelomVrstice2
+Prelom_ret:
+	LD HL,IzpisiNiz_ret
+	LD	BC,sporocilo_zagon
+	JP	IzpisiNiz2
+IzpisiNiz_ret:
+	LD HL,Prelom_ret_2
+	JP PrelomVrstice2
+Prelom_ret_2:
+	LD HL,IzpisiHex16_ret
+	LD BC,B00Bh
+	JP IzpisiHex16_2
+IzpisiHex16_ret:
+
+	HALT
+
+; Inicializacijski niz za AVDC.
+niz_init_avdc:
+	DB	$D0, $2F, $0D, $05, $99, $4F, $0A, $EA
+	DB	$00, $30
+
+; Inicializacijski niz za serijska vrata.
+niz_init_ser:
+	DB	$18, $04, $44, $03, $C1, $05, $68
+
+; Niz ukazov za GDP, ki premakne pero v spodnji levi kot in pobrisxe vrstico.
+niz_premakni_pero_spodnji_levi_kot:
+	DB	$03, $00, $05, $01, $0B, $0B, $0B, $0B
+	DB	$0B, $0B, $0B, $0B, $0B, $0B, $0B, $0B
+	DB	$0B, $0B, $0B, $0B, $00
+
+; ----------------------------------------
+
+; Niz ukazov za GDP, ki premakne pero na skrajno levo.
+niz_premakni_pero_skrajno_levo:
+	DB	$21, $00, $0D, $00
+
+; Zagonsko sporocxilo.
+sporocilo_zagon:
+	DB	$A8, $00
+	DB	"Oddbit Retro"
+	DB 	$00
+
+GDPUkaz2:
+	EX	AF,AF'
+x00B3:
+	IN	A,(0x20)
+	AND	0x04
+	JR	Z,x00B3
+	EX	AF,AF'
+	OUT	(0x20),A
+	JP	(HL)
+
+Zakasnitev2:
+	LD	B,0xFF
+x025D:
+	NOP
+	DJNZ	x025D
+	LD	B,0xFF
+x025D_3:
+	NOP
+	DJNZ	x025D_3
+	LD	B,0xFF
+x025D_4:
+	NOP
+	DJNZ	x025D_4
+	JP (HL)
+
+PrelomVrstice2:
+	IN	A,(0x20)
+	AND	0x04
+	JR	Z,PrelomVrstice2
+	LD	A,E
+	SUB	0x0C
+	LD	E,A
+	OUT	(0x36),A
+	EXX
+	LD	BC,niz_premakni_pero_spodnji_levi_kot
+	LD HL,IzpisiNiz_ret_1
+	JP	IzpisiNiz2
+IzpisiNiz_ret_1:
+	LD	BC,niz_premakni_pero_skrajno_levo
+	LD HL, IzpisiNiz_ret_2
+	JP	IzpisiNiz2
+IzpisiNiz_ret_2:
+	EXX
+; Izberemo nacxin risanja.
+	XOR	A
+	JP	GDPUkaz2
+
+IzpisiNiz2:
+	IN	A,(0x20)
+	AND	0x04
+	JR	Z,IzpisiNiz2
+	LD	A,(BC)
+	OUT	(0x23),A
+	INC	BC
+	LD	A,(BC)
+	OUT	(0x22),A
+	INC	BC
+x0251_2:
+	LD	A,(BC)
+	OR	A
+	JR NZ,skip
+	JP (HL)
+skip:
+	IN	A,(0x20)
+	AND	0x04
+	JR	Z,skip
+	LD A,(BC)
+	OUT	(0x20),A
+	INC	BC
+	JR	x0251_2
+
+IzpisiHex16_2:
+	LD	A,B
+	EXX
+	LD HL,Izpis_ret
+	JP	IzpisiHex8_2
+Izpis_ret:
+	EXX
+	LD	A,C
+	EXX
+	LD HL,Izpis_ret_2
+	JP	IzpisiHex8_2
+Izpis_ret_2
+	EXX
+	JP (HL)
+
+IzpisiHex8_2:
+	LD	B,A
+	SRA	A
+	SRA	A
+	SRA	A
+	SRA	A
+	AND	0x0F
+
+	CP	0x0A
+	JP	M,x0099_2
+	ADD	A,0x37
+	JR	x009B_2
+x0099_2:
+	ADD	A,0x30
+x009B_2:
+	EX AF,AF'
+x009B_2_2:
+	IN	A,(0x20)
+	AND	0x04
+	JR	Z,x009B_2_2
+	EX	AF,AF'
+	OUT	(0x20),A
+
+	LD	A,B
+	AND	0x0F
+
+	CP	0x0A
+	JP	M,x0099_3
+	ADD	A,0x37
+	JR	x009B_3
+x0099_3:
+	ADD	A,0x30
+x009B_3:
+	EX AF,AF'
+x009B_3_2:
+	IN	A,(0x20)
+	AND	0x04
+	JR	Z,x009B_3_2
+	EX	AF,AF'
+	OUT	(0x20),A
+
+	JP (HL)
+
 
 ; ----------------------------------------
 
@@ -56,9 +336,6 @@ x009B:
 
 ; ----------------------------------------
 
-; Pocxaka, da uporabnik pritisne tipko na tipkovnici,
-; nato izpisxe njen znak na GDP.
-
 BeriInIzpisiZnak:
 	IN	A,(0xD9)
 	BIT	0,A
@@ -83,10 +360,10 @@ GDPUkaz:
 
 CakajGDP:
 	PUSH	AF
-x00B3:
+x00B3_4:
 	IN	A,(0x20)
 	AND	0x04
-	JR	Z,x00B3
+	JR	Z,x00B3_4
 	POP	AF
 	RET
 
@@ -115,28 +392,17 @@ PrelomVrstice:
 
 ; ----------------------------------------
 
-; Niz ukazov za GDP, ki premakne pero v spodnji levi kot in pobrisxe vrstico.
-niz_premakni_pero_spodnji_levi_kot:
-	DB	$03, $00, $05, $01, $0B, $0B, $0B, $0B
-	DB	$0B, $0B, $0B, $0B, $0B, $0B, $0B, $0B
-	DB	$0B, $0B, $0B, $0B, $00
 
-; ----------------------------------------
-
-; Niz ukazov za GDP, ki premakne pero na skrajno levo.
-niz_premakni_pero_skrajno_levo:
-	DB	$21, $00, $0D, $00
 
 ; ----------------------------------------
 
 ; Vstopna tocxka v memory test.
 
-AddrBusTest:
 	START_ADDR      EQU 2000h
 	END_HI          EQU 0FFh
 	END_LO_STOP     EQU 081h            ; stop when L reaches 81h in FFxx page
 
-ADDR_BUS_TEST:
+AddrBusTest:
     ; Fill background with 00h
     LD      HL,START_ADDR
 FILL_LOOP:
@@ -213,8 +479,8 @@ ADV:
     JR      NZ, MASK_LOOP
 
     ; success
-    LD      HL,sporocilo_ok
-    CALL    IzpisiNiz
+    LD      A,'*'
+    CALL    GDPUkaz
     RET
 
 ; ------------------------------------------------------------
@@ -326,8 +592,8 @@ PB_VERIFY:
 
 ; ------------ PASS ----------------------
 PASS:
-            LD      HL,sporocilo_ok
-            CALL    IzpisiNiz
+            LD      A,'*'
+            CALL    GDPUkaz
             RET
 
 ; ----------------------------------------
@@ -356,8 +622,6 @@ FAIL_report:
 
 Zacetek:
 	LD	SP,0xFFC0
-
-	DI
 
 ; Inicializacija PIO
 	LD	A,0x07
@@ -393,6 +657,7 @@ Zacetek:
 	OUT	(0x39),A
 	OUT	(0x30),A
 
+; Inicializacija AVDC
 	CALL	AVDCInit1
 	CALL	AVDCInit2
 
@@ -430,6 +695,8 @@ Zacetek:
 	LD	HL,sporocilo_boot
 	CALL	IzpisiPrelomInNiz
 
+	;CALL DataBusTest
+
 	CALL AddrBusTest
 
 	LD	C,0
@@ -437,9 +704,7 @@ Zacetek:
 	OUT (0x90),A
 	LD	C,1
 	CALL	MemoryTest
-	OUT (0x88),A	
-
-	HALT
+	OUT (0x88),A
 
 	CALL	FDCInit
 
@@ -451,7 +716,22 @@ Zacetek:
 	JP	NZ,HDBootSkok
 	LD	HL,sporocilo_interrupted
 	CALL	IzpisiPrelomInNiz
-	HALT
+
+UkaznaVrstica:
+	LD	SP,0xFFC0
+	CALL	PrelomVrstice
+	LD	A,0x2A	; '*'
+	CALL	GDPUkaz
+	CALL	BeriInIzpisiZnak
+	AND	0xDF	; Pretvori v uppercase
+	CP	0x41	; 'A'
+	JP	Z,HDBootSkok
+	CP	0x46	; 'F'
+	JP	Z,FDBootSkok
+NeznanUkaz:
+	LD	A,0x3F	; '?'
+	CALL	GDPUkaz
+	JR	UkaznaVrstica
 
 ; ----------------------------------------
 
@@ -468,7 +748,7 @@ sporocilo_interrupted:
 ; Niz z verzijo programa.
 sporocilo_boot:
 	DB	$21, $00
-	DB	"[ Boot V 1.1 - WF ]"
+	DB	"Oddbit Boot v1.0"
 	DB 	$00
 
 ; ----------------------------------------
@@ -510,9 +790,9 @@ x0251:
 Zakasnitev:
 	PUSH	BC
 	LD	B,0xFF
-x025D:
+x025D_2:
 	NOP
-	DJNZ	x025D
+	DJNZ	x025D_2
 	POP	BC
 	RET
 
@@ -589,31 +869,22 @@ AVDCNastaviDispAddr:
 
 ; ----------------------------------------
 
-; Inicializacijski niz za AVDC.
-niz_init_avdc:
-	DB	$D0, $2F, $0D, $05, $99, $4F, $0A, $EA
-	DB	$00, $30
+
 
 ; ----------------------------------------
 
-; Inicializacijski niz za serijska vrata.
-niz_init_ser:
-	DB	$18, $04, $44, $03, $C1, $05, $68
+
 
 ; ----------------------------------------
 
-; Zagonsko sporocxilo.
-sporocilo_zagon:
-	DB	$A8, $00
-	DB	"Delta Partner GDP"
-	DB 	$00
+
 
 ; ----------------------------------------
 
 ; Sporocxilo o testiranju spomina.
 sporocilo_testing_memory:
 	DB	$21, $00
-	DB	"TESTING MEMORY ... "
+	DB	"TESTING MEMORY "
 	DB 	$00
 
 ; ----------------------------------------
@@ -1288,14 +1559,4 @@ ivt_2:
 sporocilo_loading_error:
 	DB	$11, $00
 	DB	"LOADING ERROR FROM HARD DISK TRY TO LOAD SYSTEM FROM FLOPPY "
-	DB	$00
-
-sporocilo_error:
-	DB	$21, $00
-	DB	"ERROR"
-	DB	$00
-
-sporocilo_ok:
-	DB	$21, $00
-	DB	"OK "
 	DB	$00
