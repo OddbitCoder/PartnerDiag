@@ -190,7 +190,11 @@ x025D_3:
 x025D_4:
 	NOP
 	DJNZ	x025D_4
-	JP (HL)
+	LD	B,0xFF
+x025D_5:
+	NOP
+	DJNZ	x025D_5
+	JP (HL)	
 
 PrelomVrstice2:
 	IN	A,(0x20)
