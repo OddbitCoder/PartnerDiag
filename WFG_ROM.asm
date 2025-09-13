@@ -335,14 +335,14 @@ DBUS_LOOP:
 	LD      (HL),A
 	LD      E,(HL)
 	CP      E
-	JR      Z,DBUS_FAIL    ; if mismatch, bail
+	JR      NZ,DBUS_FAIL    ; if mismatch, bail
 
 ; --- Walking 0s (complement) ---
     CPL                     ; complement A (walking 0s)
     LD      (HL),A
     LD      E,(HL)
     CP      E
-    JR      Z,DBUS_FAIL
+    JR      NZ,DBUS_FAIL
 
     CPL                     ; restore original walking-1s
     RLCA                    ; rotate left to next bit
@@ -358,14 +358,14 @@ GDPUkaz_ret_3:
 
 DBUS_FAIL:
 	; After CP E, A = expected, E = actual
+	LD D,A
 	EXX
-	EX AF,AF'
 	LD HL,Prelom_ret_3
 	JP PrelomVrstice2
 Prelom_ret_3:
 	; expected
 	EXX
-	EX AF,AF'
+	LD A,D
 	LD HL,Izpis_hex_1
 	JP IzpisiHex8_2
 Izpis_hex_1:
