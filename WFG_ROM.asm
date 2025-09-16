@@ -92,24 +92,6 @@ Zakasnitev_ret:
 	LD	A,0xBB	; Write from cursor to pointer
 	OUT	(0x39),A
 
-; Inicializacija SIO "CRT" kanala (za tipkovnico)
-;	LD	C,0xD9
-;	LD	HL,niz_init_ser
-;	LD	B,0x07
-;	OTIR
-
-; Inicializacija SIO "LPT" kanala
-;	LD	C,0xDB
-;	LD	HL,niz_init_ser
-;	LD	B,0x07
-;	OTIR
-
-; Inicializacija SIO "VAX" kanala
-;	LD	C,0xE1
-;	LD	HL,niz_init_ser
-;	LD	B,0x07
-;	OTIR
-
 ; Y koordinata GDP peresa := 100
 	LD	A,0x64
 	OUT	(0x2B),A
@@ -138,14 +120,79 @@ Prelom_ret_2:
 	JP	IzpisiNiz2
 IzpisiNiz_ret_3:
 
-;	LD HL,IzpisiHex16_ret
-;	LD BC,B00Bh
-;	JP IzpisiHex16_2
-;IzpisiHex16_ret:
-
 	LD HL,DataBusTest_ret
 	JP DataBusTest
 DataBusTest_ret:
+
+	LD HL,FillRamZero_ret
+	JP FillRamZero
+FillRamZero_ret:
+
+	; Checkpoint
+	LD A,'*'
+	LD HL,GdpUkaz_ret_6
+	JP GDPUkaz2
+GdpUkaz_ret_6:
+
+	OUT	(0x90),A ; Switch to bank 2
+
+	LD HL,FillRamZero_ret_2
+	JP FillRamZero
+FillRamZero_ret_2:
+
+	; Checkpoint
+	LD A,'*'
+	LD HL,GdpUkaz_ret_7
+	JP GDPUkaz2
+GdpUkaz_ret_7:
+
+	OUT	(0x88),A ; Switch back to bank 1
+
+	; Address Bus Test
+	LD      BC,0001h                ; B=high, C=low mask
+MASK_LOOP:
+    ; probe = 2000h OR BC   (always within 2000h..FFFFh)
+	LD      L,C
+	LD      H,B
+	SET     5,H        ; equivalent to OR 20h on the high byte
+    ; write FF at probe (bank 1)
+    LD      (HL),FFh
+    ; PERFORM CHECKS
+    ; BANK 1 needs to be zeros and $FF at probe
+
+    LD B,H ; probe address
+    LD C,L ; probe address
+
+    LD HL,CheckRamZero_ret_2
+    LD D,$11 ; test for probe (no) + memory bank reference
+    JP CheckRamZero
+CheckRamZero_ret_2:
+
+    ; BANK 2 needs to be all zeros
+
+    OUT	(0x90),A ; Switch to bank 2
+
+    ;LD B,H ; probe address
+    ;LD C,L ; probe address
+    LD HL,CheckRamZero_ret
+    LD D,$02 ; test for probe (no) + memory bank reference
+    JP CheckRamZero
+CheckRamZero_ret:
+
+; remove probe (bank 1)
+;	OUT	(0x88),A
+;	LD      H,D
+;    LD      L,E
+;    XOR A
+;    LD      (HL),A
+
+; write FF at probe (bank 2)
+;	OUT	(0x90),A
+;    LD      H,D
+;    LD      L,E
+;    LD      A,0FFh
+;    LD      (HL),A
+    ; PERFORM CHECKS
 
 	LD HL,Prelom_ret_4
 	JP PrelomVrstice2
@@ -357,253 +404,144 @@ GDPUkaz_ret_3:
 	JP (HL)
 
 DBUS_FAIL:
-	; After CP E, A = expected, E = actual
 	LD D,A
-	EXX
-	LD HL,Prelom_ret_3
-	JP PrelomVrstice2
-Prelom_ret_3:
-	; expected
-	EXX
+	; D = expected, E = actual
+; Print expected
 	LD A,D
 	LD HL,Izpis_hex_1
 	JP IzpisiHex8_2
 Izpis_hex_1:
-	; actual
-	EXX
-	LD HL,Prelom_ret_5
-	JP PrelomVrstice2
-Prelom_ret_5:
-	EXX
-	LD HL,Izpis_hex_2
+; Print actual
+	LD A,' '
+	LD HL,GDPUkaz_ret_5
+	JP	GDPUkaz2
+GDPUkaz_ret_5:
 	LD A,E
+	LD HL,Izpis_hex_2
 	JP IzpisiHex8_2
 Izpis_hex_2:
 	HALT
 
 ; ----------------------------------------
 
-	START_ADDR      EQU 2000h
-	END_HI          EQU 0FFh
-	END_LO_STOP     EQU 081h            ; stop when L reaches 81h in FFxx page
-
-AddrBusTest:
-    ; Fill background with 00h
-    LD      HL,START_ADDR
-FILL_LOOP:
+FillRamZero:
+    EXX
+    LD      HL,2000h
     XOR     A
-    LD      (HL),A
+    LD      (HL),A           ; place one zero at 2000h
+    LD      DE,2001h
+    LD      BC,0DFFFh        ; remaining bytes: E000 - 1
+    LDIR                        ; copy zero from 2000h to 2001h..FFFFh
+    EXX
+    JP      (HL)
+
+CheckRamZero:
+	; BC = probe address
+	; D = [test for probe?][memory bank reference]
+
+    EXX
+    LD      HL,2000h         ; start
+    LD      BC,0E000h        ; count = 2000h..FFFFh (57344 bytes)
+
+_loop:
+    LD      A,(HL)           ; fetch byte
+    OR      A                ; Z=1 if byte == 0
+    JR      NZ,_not_zero     ; bail if any non-zero
+_continue:
     INC     HL
-    LD      A,H
-    CP      END_HI
-    JR      C,FILL_LOOP
-    LD      A,L
-    CP      END_LO_STOP
-    JR      C,FILL_LOOP
-
-    ; Masks: 0001h << k up to 8000h (tests A0..A15 relative to base)
-    LD      BC,0001h                ; B=high, C=low mask
-MASK_LOOP:
-    ; DE = probe = 2000h OR BC   (always within 2000h..FFFFh)
-    LD      D,20h                   ; START_ADDR high
-    LD      E,00h                   ; START_ADDR low
-    LD      A,E
+    DEC     BC
+    LD      A,B              ; test BC != 0 without affecting HL
     OR      C
-    LD      E,A
-    LD      A,D
-    OR      B
-    LD      D,A                     ; DE = probe
+    JR      NZ,_loop
 
-    ; write FF at probe
-    LD      H,D
-    LD      L,E
-    LD      A,0FFh
-    LD      (HL),A
+    ; success: all zeros
+;    LD	A,'*'
+;	LD HL,GDPUkaz_ret_a
+;	JP	GDPUkaz2
+;GDPUkaz_ret_a:
+    EXX
+    JP      (HL)
 
-    ; verify whole window: only probe is FF, all others 00
-    LD      HL,START_ADDR
-VERIFY_LOOP:
-    LD      A,H
-    CP      D
-    JR      NZ, NOT_PROBE_ROW
-    LD      A,L
-    CP      E
-    JR      NZ, NOT_PROBE
-    ; HL == DE → expect FF
-    LD      A,(HL)          ; actual
-    CP      0FFh
-    JR      NZ, FAIL_AT_PROBE
-    JR      ADV
+_not_zero:
+	; do we want to test for probe?
+	EXX
+	LD A,D
+	EXX
+	AND  F0h        ; isolate high nibble
+	JR   Z, _fail ; if result is zero, flag was false
+	; HERE, WE DO WANT TO TEST THE PROBE
+	; check if BC' equals HL, then we want $FF instead
+	EXX
+	LD A,B
+	EXX
+	CP H
+	JR NZ,_fail
+	EXX
+	LD A,C
+	EXX
+	CP L
+	JR NZ,_fail
+	; BC' == HL
+	LD      A,(HL)
+	CP FFh
+	JR Z,_continue
+_fail:
+	; BC' = probe
+	; HL = address being checked
+	; D' = function parameters
+	; (HL) = actual value
+	; expected = if BC'==HL, then FF, else 00
+; Save BC' into DE
+	EXX
+	LD A,B
+	EXX
+	LD D,A
+	EXX
+	LD A,C
+	EXX
+	LD E,A
+; Print HL
+	LD B,H
+	LD C,L
+	LD A,' '
+	LD HL,gdp_ukaz_ret
+	JP GDPUkaz2
+gdp_ukaz_ret:
+	LD HL,izpisi_16_ret
+	JP IzpisiHex16_2
+izpisi_16_ret:
+; print actual value
+	LD A,' '
+	LD HL,gdp_ukaz_ret_2
+	JP GDPUkaz2
+gdp_ukaz_ret_2:
+	LD A,(BC)
+	LD HL,Izpis_hex_1_2
+	JP IzpisiHex8_2
+Izpis_hex_1_2:
+; print parameters
+	LD A,' '
+	LD HL,gdp_ukaz_ret_3
+	JP GDPUkaz2
+gdp_ukaz_ret_3:
+	EXX
+	LD A,D
+	EXX
+	LD HL,Izpis_hex_1_4
+	JP IzpisiHex8_2
+Izpis_hex_1_4:
+; print probe address
+	LD A,' '
+	LD HL,gdp_ukaz_ret_4
+	JP GDPUkaz2
+gdp_ukaz_ret_4:
+	LD B,D
+	LD C,E
+	LD HL,izpisi_16_ret_2
+	JP IzpisiHex16_2
+izpisi_16_ret_2:
 
-NOT_PROBE_ROW:
-NOT_PROBE:
-    LD      A,(HL)          ; actual
-    OR      A               ; compare with 00
-    JR      NZ, FAIL_AT_OTHER
-
-ADV:
-    INC     HL
-    LD      A,H
-    CP      END_HI
-    JR      C, VERIFY_LOOP
-    LD      A,L
-    CP      END_LO_STOP
-    JR      C, VERIFY_LOOP
-
-    ; restore 00 at probe
-    LD      H,D
-    LD      L,E
-    XOR     A
-    LD      (HL),A
-
-    ; next mask: BC <<= 1 ; stop after 8000h processed
-    SLA     C
-    RL      B
-    LD      A,B
-    OR      C
-    JR      NZ, MASK_LOOP
-
-    ; success
-    ;LD      A,'*'
-    ;CALL    GDPUkaz
-    RET
-
-; ------------------------------------------------------------
-; FAIL HANDLERS
-; ------------------------------------------------------------
-
-FAIL_AT_PROBE:
-; HL = probe address
-; DE = probe address (expected location)
-; A  = actual value read (≠ FFh)
-; Expectation was FFh but cell returned something else
-FAIL_AT_OTHER:
-; HL = address being checked (not the probe)
-; DE = probe address (the only one supposed to contain FFh)
-; A  = actual value read (≠ 00h)
-; Expectation was 00h but another cell was corrupted (aliasing)
-	;PUSH AF
-	;CALL IzpisiHex16 ; HL
-	;LD H,D
-	;LD L,E
-	;CALL IzpisiHex16 ; DE
-	;CALL PrelomVrstice
-	;POP AF
-	;CALL IzpisiHex8 ; A
-    HALT
-
-MemoryTest:
-;	START_ADDR      EQU 2000h
-;	END_HI          EQU 0FFh           ; end page high byte
-;	END_LO_STOP     EQU 081h           ; stop when L reaches 81h in FFxx page
-
-; ------------ Pass A: write P = H XOR L ------------
-            LD      HL, START_ADDR
-PA_WRITE:
-            LD      A,H
-            XOR     L
-            XOR     C
-            LD      (HL),A
-
-; range-specific increment/terminate (to FF80 inclusive)
-            INC     HL
-            LD      A,H
-            CP      END_HI          ; H < FF ?
-            JR      C, PA_WRITE     ; yes -> continue
-            ; here H == FF (cannot be > FF)
-            LD      A,L
-            CP      END_LO_STOP     ; L < 81h ?
-            JR      C, PA_WRITE     ; yes -> continue
-            ; else L == 81h -> done writing pass A
-
-; ------------ Pass A: verify P ------------
-            LD      HL, START_ADDR
-PA_VERIFY:
-            LD      A,H
-            XOR     L               ; expected = P
-            XOR     C
-            LD      B,A
-            LD      A,(HL)          ; actual
-            CP      B
-            JR      NZ, FAIL_PA
-
-            ; increment with same range-specific stop
-            INC     HL
-            LD      A,H
-            CP      END_HI
-            JR      C, PA_VERIFY
-            LD      A,L
-            CP      END_LO_STOP
-            JR      C, PA_VERIFY
-            ; done verifying pass A
-
-; ------------ Pass B: write ~P ------------
-            LD      HL, START_ADDR
-PB_WRITE:
-            LD      A,H
-            XOR     L
-            XOR     C
-            CPL                     ; ~P
-            LD      (HL),A
-
-            INC     HL
-            LD      A,H
-            CP      END_HI
-            JR      C, PB_WRITE
-            LD      A,L
-            CP      END_LO_STOP
-            JR      C, PB_WRITE
-            ; done writing pass B
-
-; ------------ Pass B: verify ~P ------------
-            LD      HL, START_ADDR
-PB_VERIFY:
-            LD      A,H
-            XOR     L
-            XOR     C
-            CPL                     ; expected = ~P
-            LD      B,A
-            LD      A,(HL)          ; actual
-            CP      B
-            JR      NZ, FAIL_PB
-
-            INC     HL
-            LD      A,H
-            CP      END_HI
-            JR      C, PB_VERIFY
-            LD      A,L
-            CP      END_LO_STOP
-            JR      C, PB_VERIFY
-
-; ------------ PASS ----------------------
-PASS:
-            ;LD      A,'*'
-            ;CALL    GDPUkaz
-            RET
-
-; ----------------------------------------
-; B = expected, A = actual, HL = failing address
-FAIL_PA:
-			;PUSH    AF
-			;LD      A,'A'
-			;CALL    GDPUkaz
-			;JR      FAIL_report
-FAIL_PB:
-            ;PUSH    AF
-            ;LD      A,'B'
-            ;CALL    GDPUkaz
-FAIL_report:
-			;CALL    PrelomVrstice
-			;POP     AF
-			;CALL    IzpisiHex8 ; ACTUAL
-			;CALL    PrelomVrstice
-			;LD      A,B
-			;CALL    IzpisiHex8 ; EXPECTED
-			;CALL    PrelomVrstice
-			;LD      A,C
-			;CALL    IzpisiHex8 ; MEMORY BANK
-			;CALL	IzpisiHex16 ; FAILING ADDRESS
-			HALT
+	HALT
 
 ; ----------------------------------------
 
@@ -622,5 +560,5 @@ sporocilo_initializing:
 
 sporocilo_done:
 	DB	$21, $00
-	DB	"DONE"
+	DB	"PASSED"
 	DB 	$00
