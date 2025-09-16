@@ -128,11 +128,11 @@ DataBusTest_ret:
 	JP FillRamZero
 FillRamZero_ret:
 
-	; Checkpoint
-	LD A,'*'
-	LD HL,GdpUkaz_ret_6
-	JP GDPUkaz2
-GdpUkaz_ret_6:
+;	; Checkpoint
+;	LD A,'*'
+;	LD HL,GdpUkaz_ret_6
+;	JP GDPUkaz2
+;GdpUkaz_ret_6:
 
 	OUT	(0x90),A ; Switch to bank 2
 
@@ -140,11 +140,11 @@ GdpUkaz_ret_6:
 	JP FillRamZero
 FillRamZero_ret_2:
 
-	; Checkpoint
-	LD A,'*'
-	LD HL,GdpUkaz_ret_7
-	JP GDPUkaz2
-GdpUkaz_ret_7:
+;	; Checkpoint
+;	LD A,'*'
+;	LD HL,GdpUkaz_ret_7
+;	JP GDPUkaz2
+;GdpUkaz_ret_7:
 
 	OUT	(0x88),A ; Switch back to bank 1
 
@@ -160,39 +160,65 @@ MASK_LOOP:
     ; PERFORM CHECKS
     ; BANK 1 needs to be zeros and $FF at probe
 
-    LD B,H ; probe address
-    LD C,L ; probe address
-
-    LD HL,CheckRamZero_ret_2
-    LD D,$11 ; test for probe (no) + memory bank reference
-    JP CheckRamZero
-CheckRamZero_ret_2:
+    LD HL,CheckRamVals_ret_2
+    LD D,$11 ; test for probe (yes) + memory bank reference
+    JP CheckRamVals
+CheckRamVals_ret_2:
 
     ; BANK 2 needs to be all zeros
 
     OUT	(0x90),A ; Switch to bank 2
 
-    ;LD B,H ; probe address
-    ;LD C,L ; probe address
-    LD HL,CheckRamZero_ret
+    LD HL,CheckRamVals_ret
     LD D,$02 ; test for probe (no) + memory bank reference
-    JP CheckRamZero
-CheckRamZero_ret:
+    JP CheckRamVals
+CheckRamVals_ret:
+
+	LD      L,C
+	LD      H,B
+	SET     5,H
 
 ; remove probe (bank 1)
-;	OUT	(0x88),A
-;	LD      H,D
-;    LD      L,E
-;    XOR A
-;    LD      (HL),A
+	OUT	(0x88),A
+    LD      (HL),0
 
 ; write FF at probe (bank 2)
-;	OUT	(0x90),A
-;    LD      H,D
-;    LD      L,E
-;    LD      A,0FFh
-;    LD      (HL),A
+	OUT	(0x90),A
+    LD      (HL),FFh
     ; PERFORM CHECKS
+	LD HL,CheckRamVals_ret_3
+    LD D,$12 ; test for probe (yes) + memory bank reference
+    JP CheckRamVals
+CheckRamVals_ret_3:
+
+	OUT	(0x88),A ; switch to bank 1
+
+	LD HL,CheckRamVals_ret_4
+    LD D,$01 ; test for probe (no) + memory bank reference
+    JP CheckRamVals
+CheckRamVals_ret_4:
+
+; remove probe
+	OUT	(0x90),A
+	LD   H,B
+	LD   L,C
+	SET 5,H
+	LD      (HL),0
+
+	OUT	(0x88),A
+
+	; CHECKPOINT
+	LD A,'*'
+	LD HL,GdpUkaz_ret_8
+	JP GDPUkaz2
+GdpUkaz_ret_8:
+
+	; INCREASE PROBE COUNTER (BC)
+	SLA C
+	RL B
+ 	LD   A,B
+    OR   C
+    JR   NZ, MASK_LOOP
 
 	LD HL,Prelom_ret_4
 	JP PrelomVrstice2
@@ -435,11 +461,12 @@ FillRamZero:
     EXX
     JP      (HL)
 
-CheckRamZero:
-	; BC = probe address
-	; D = [test for probe?][memory bank reference]
+CheckRamVals:
+	EXX
 
-    EXX
+	; BC' = counter => probe address can be computed
+	; D' = [test for probe?][memory bank reference]
+
     LD      HL,2000h         ; start
     LD      BC,0E000h        ; count = 2000h..FFFFh (57344 bytes)
 
@@ -454,11 +481,7 @@ _continue:
     OR      C
     JR      NZ,_loop
 
-    ; success: all zeros
-;    LD	A,'*'
-;	LD HL,GDPUkaz_ret_a
-;	JP	GDPUkaz2
-;GDPUkaz_ret_a:
+    ; success
     EXX
     JP      (HL)
 
@@ -474,6 +497,7 @@ _not_zero:
 	EXX
 	LD A,B
 	EXX
+	SET 5,A
 	CP H
 	JR NZ,_fail
 	EXX
@@ -486,12 +510,12 @@ _not_zero:
 	CP FFh
 	JR Z,_continue
 _fail:
-	; BC' = probe
+	; BC' = probe counter
 	; HL = address being checked
 	; D' = function parameters
 	; (HL) = actual value
-	; expected = if BC'==HL, then FF, else 00
-; Save BC' into DE
+	; expected = if (probe address)==HL, then FF, else 00
+; DE = probe address
 	EXX
 	LD A,B
 	EXX
@@ -500,6 +524,7 @@ _fail:
 	LD A,C
 	EXX
 	LD E,A
+	SET 5,D
 ; Print HL
 	LD B,H
 	LD C,L
