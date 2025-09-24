@@ -125,12 +125,6 @@ IzpisiNiz_ret_3:
 	JP fill_ram
 FillRamZero_ret:
 
-	; Checkpoint
-	LD A,'+'
-	LD HL,GdpUkaz_ret_6
-	JP gdp_cmd
-GdpUkaz_ret_6:
-
 	OUT	(0x90),A ; Switch to bank 2
 
 	LD A,0
@@ -138,15 +132,12 @@ GdpUkaz_ret_6:
 	JP fill_ram
 FillRamZero_ret_2:
 
-	; Checkpoint
-	LD A,'+'
-	LD HL,GdpUkaz_ret_7
-	JP gdp_cmd
-GdpUkaz_ret_7:
-
 	OUT	(0x88),A ; Switch back to bank 1
 
 	LD B,0
+
+repeat_with_B1:
+
 	LD A,0
 	EXX
 	LD HL,$2000
@@ -157,7 +148,6 @@ fill_ram_addr_ret:
 
 	OUT	(0x90),A ; Switch to bank 2
 
-	LD B,0
 	LD A,1
 	EXX
 	LD HL,$2000
@@ -168,7 +158,6 @@ fill_ram_addr_ret_2:
 
 	OUT	(0x88),A ; Switch back to bank 1
 
-	LD B,0
 	LD A,0
 	EXX
 	LD HL,$2000
@@ -179,7 +168,6 @@ check_ram_addr_ret:
 
 	OUT	(0x90),A ; Switch to bank 2
 
-	LD B,0
 	LD A,1
 	EXX
 	LD HL,$2000
@@ -192,7 +180,6 @@ check_ram_addr_ret_2:
 
 	; TEST SHARED MEMORY
 
-	LD B,0
 	LD A,0
 	EXX
 	LD HL,$C000
@@ -201,7 +188,6 @@ check_ram_addr_ret_2:
 	JP fill_ram_addr
 fill_ram_addr_ret_3:
 
-	LD B,0
 	LD A,0
 	EXX
 	LD HL,$C000
@@ -212,7 +198,6 @@ check_ram_addr_ret_3:
 
 	OUT	(0x90),A ; Switch to bank 2
 
-	LD B,0
 	LD A,0
 	EXX
 	LD HL,$C000
@@ -221,6 +206,30 @@ check_ram_addr_ret_3:
 	JP check_ram_addr
 check_ram_addr_ret_4:
 
+	OUT	(0x88),A
+
+	LD A,B
+	OR A
+	JR NZ,done
+
+	LD A,$FF
+	LD HL,FillRamZero_ret_3
+	JP fill_ram
+FillRamZero_ret_3
+
+	OUT	(0x90),A ; Switch to bank 2
+
+	LD A,$FF
+	LD HL,FillRamZero_ret_4
+	JP fill_ram
+FillRamZero_ret_4:
+
+	OUT	(0x88),A ; Switch back to bank 1
+
+	LD B,1
+	JP repeat_with_B1
+
+done:
 	LD HL,Prelom_ret_4
 	JP PrelomVrstice2
 Prelom_ret_4:
@@ -407,6 +416,10 @@ fill_ram_loop:
 	LD A,H
 	OR L
 	JR NZ,fill_ram_loop
+	LD A,'+'
+	LD HL,fill_ram_gdp_cmd_ret
+	JP gdp_cmd
+fill_ram_gdp_cmd_ret:
 	EXX
 	JP (HL)
 
@@ -417,8 +430,17 @@ fill_ram_addr:
 	; HL is passed in by the caller
 	LD E,A
 fill_ram_addr_loop:
-	; check if 0 before writing
+	; check if 0 or FF before writing
 	LD A,(HL)
+	LD D,A
+	EXX
+	LD A,B
+	OR A
+	EXX
+	LD A,D
+	JR Z,fill_ram_addr_skip_cpl
+	CPL
+fill_ram_addr_skip_cpl:
 	OR A
 	JR NZ,fill_ram_addr_fail
 	LD A,H
@@ -431,9 +453,9 @@ fill_ram_addr_loop:
 	OR A
 	EXX
 	LD A,D
-	JR Z,fill_ram_addr_skip_cpl ; Z/NZ from OR
+	JR Z,fill_ram_addr_skip_cpl_2 ; Z/NZ from OR
 	CPL
-fill_ram_addr_skip_cpl:
+fill_ram_addr_skip_cpl_2:
 	LD (HL),A
 	INC HL
 	LD A,H
