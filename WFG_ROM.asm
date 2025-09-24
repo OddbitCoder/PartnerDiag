@@ -1,7 +1,3 @@
-; TODO: NMI interrupt handler at $0066.
-
-	ORG	$0000
-
 	DI
 
 ; PIO initialization.
