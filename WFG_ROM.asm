@@ -1,10 +1,6 @@
-; ----------------------------------------
+; TODO: NMI interrupt handler at $0066
 
 	ORG	$0000
-
-; ----------------------------------------
-
-; TODO: NMI interrupt handler at $0066
 
 	DI
 
@@ -34,13 +30,13 @@
 	OUT	($21),A
 
 	LD	A,$04	; Clear GDP image...
-	LD HL,GDPUkaz_ret_1
+	LD HL,gdp_cmd_ret
 	JP	gdp_cmd
-GDPUkaz_ret_1:
+gdp_cmd_ret:
 	LD	A,$05	; ...and place the pen at the left edge.
-	LD HL,GDPUkaz_ret_2
+	LD HL,gdp_cmd_ret_2
 	JP	gdp_cmd
-GDPUkaz_ret_2:
+gdp_cmd_ret_2:
 	XOR	A
 	OUT	($39),A
 	OUT	($30),A
@@ -48,10 +44,10 @@ GDPUkaz_ret_2:
 ; AVDC initialization
 	LD	A,$00
 	OUT	($39),A
-	LD HL,Zakasnitev_ret
-	JP	Zakasnitev2
-Zakasnitev_ret:
-	LD	HL,niz_init_avdc
+	LD HL,delay_ret
+	JP	delay
+delay_ret:
+	LD	HL,data_avdc_init
 	XOR	A
 
 ; SS1 := 0
@@ -84,7 +80,7 @@ Zakasnitev_ret:
 	LD	A,H
 	OUT	($38),A
 
-; Fill AVDC framebuffer with spaces?
+; Fill AVDC framebuffer with spaces
 	LD	A,$20
 	OUT	($34),A
 	XOR	A
@@ -96,47 +92,47 @@ Zakasnitev_ret:
 	LD	A,$64
 	OUT	($2B),A
 
-	LD HL,Prelom_ret
-	JP PrelomVrstice2
-Prelom_ret:
+	LD HL,line_break_ret
+	JP line_break
+line_break_ret:
 
-	LD HL,IzpisiNiz_ret
-	LD	BC,sporocilo_zagon
-	JP	IzpisiNiz2
-IzpisiNiz_ret:
+	LD HL,write_string_ret
+	LD	BC,string_startup
+	JP	write_string
+write_string_ret:
 
 ; Place the pen at the left edge again.
 	LD	A,$05
-	LD HL,GDPUkaz_ret
+	LD HL,gdp_cmd_ret_3
 	JP	gdp_cmd
-GDPUkaz_ret:
+gdp_cmd_ret_3
 
-	LD HL,Prelom_ret_2
-	JP PrelomVrstice2
-Prelom_ret_2:
+	LD HL,line_break_2
+	JP line_break
+line_break_2:
 
-	LD HL,IzpisiNiz_ret_3
-	LD BC,sporocilo_testing_memory
-	JP	IzpisiNiz2
-IzpisiNiz_ret_3:
+	LD HL,write_string_ret_2
+	LD BC,string_testing_memory
+	JP	write_string
+write_string_ret_2:
 
 	LD A,$00
-	LD HL,FillRamZero_ret
+	LD HL,fill_ram_ret
 	JP fill_ram
-FillRamZero_ret:
+fill_ram_ret:
 
 	OUT	($90),A ; Switch to bank 2
 
 	LD A,$00
-	LD HL,FillRamZero_ret_2
+	LD HL,fill_ram_ret_2
 	JP fill_ram
-FillRamZero_ret_2:
+fill_ram_ret_2:
 
 	OUT	($88),A ; Switch back to bank 1
 
 	LD B,$00
 
-repeat_with_B1:
+repeat_with_cpl:
 
 	LD A,$00
 	EXX
@@ -213,60 +209,48 @@ check_ram_addr_ret_4:
 	JR NZ,done
 
 	LD A,$FF
-	LD HL,FillRamZero_ret_3
+	LD HL,fill_ram_ret_3
 	JP fill_ram
-FillRamZero_ret_3
+fill_ram_ret_3
 
 	OUT	($90),A ; Switch to bank 2
 
 	LD A,$FF
-	LD HL,FillRamZero_ret_4
+	LD HL,fill_ram_ret_4
 	JP fill_ram
-FillRamZero_ret_4:
+fill_ram_ret_4:
 
 	OUT	($88),A ; Switch back to bank 1
 
 	LD B,$01
-	JP repeat_with_B1
+	JP repeat_with_cpl
 
 done:
-	LD HL,Prelom_ret_4
-	JP PrelomVrstice2
-Prelom_ret_4:
+	LD HL,line_break_ret_2
+	JP line_break
+line_break_ret_2:
 
-	LD HL,IzpisiNiz_ret_4
-	LD BC,sporocilo_done
-	JP	IzpisiNiz2
-IzpisiNiz_ret_4:
+	LD HL,write_string_ret_3
+	LD BC,string_passed
+	JP	write_string
+write_string_ret_3:
 
 	HALT
 
 ; AVDC initialization string.
-niz_init_avdc:
+data_avdc_init:
 	DB	$D0, $2F, $0D, $05, $99, $4F, $0A, $EA
 	DB	$00, $30
 
-; Serial port initialization string.
-niz_init_ser:
-	DB	$18, $04, $44, $03, $C1, $05, $68
-
 ; GDP command string that moves the pen to the bottom-left corner and clears the line.
-niz_premakni_pero_spodnji_levi_kot:
+data_move_pen_bottom_left:
 	DB	$03, $00, $05, $01, $0B, $0B, $0B, $0B
 	DB	$0B, $0B, $0B, $0B, $0B, $0B, $0B, $0B
 	DB	$0B, $0B, $0B, $0B, $00
 
-; ----------------------------------------
-
 ; GDP command string that moves the pen to the far left.
-niz_premakni_pero_skrajno_levo:
+data_move_pen_left:
 	DB	$21, $00, $0D, $00
-
-; Boot message.
-sporocilo_zagon:
-	DB	$A8, $00
-	DB	"Memory Test"
-	DB 	$00
 
 gdp_cmd:
 	EX	AF,AF'
@@ -278,7 +262,7 @@ x00B3:
 	OUT	($20),A
 	JP	(HL)
 
-Zakasnitev2:
+delay:
 	LD	B,$FF
 x025D:
 	NOP
@@ -297,32 +281,32 @@ x025D_5:
 	DJNZ	x025D_5
 	JP (HL)
 
-PrelomVrstice2:
+line_break:
 	IN	A,($20)
 	AND	$04
-	JR	Z,PrelomVrstice2
+	JR	Z,line_break
 	LD	A,E
 	SUB	$0C
 	LD	E,A
 	OUT	($36),A
 	EXX
-	LD	BC,niz_premakni_pero_spodnji_levi_kot
+	LD	BC,data_move_pen_bottom_left
 	LD HL,IzpisiNiz_ret_1
-	JP	IzpisiNiz2
+	JP	write_string
 IzpisiNiz_ret_1:
-	LD	BC,niz_premakni_pero_skrajno_levo
+	LD	BC,data_move_pen_left
 	LD HL, IzpisiNiz_ret_2
-	JP	IzpisiNiz2
+	JP	write_string
 IzpisiNiz_ret_2:
 	EXX
 ; Select drawing mode.
 	XOR	A
 	JP	gdp_cmd
 
-IzpisiNiz2:
+write_string:
 	IN	A,($20)
 	AND	$04
-	JR	Z,IzpisiNiz2
+	JR	Z,write_string
 	LD	A,(BC)
 	OUT	($23),A
 	INC	BC
@@ -400,8 +384,6 @@ x009B_3_2:
 	OUT	($20),A
 
 	JP (HL)
-
-; ----------------------------------------
 
 ; Entry point to memory test.
 
@@ -590,22 +572,17 @@ check_ram_addr_gdp_cmd_ret_4:
 check_ram_addr_write_hex_8_ret_2:
 	HALT
 
-; ----------------------------------------
+string_startup:
+	DB	$A8, $00
+	DB	"Memory Test"
+	DB 	$00
 
-; Memory testing message.
-sporocilo_testing_memory:
+string_testing_memory:
 	DB	$21, $00
 	DB	"TESTING "
 	DB 	$00
 
-; ----------------------------------------
-
-sporocilo_initializing:
-	DB	$21, $00
-	DB	"INITIALIZING "
-	DB 	$00
-
-sporocilo_done:
+string_passed:
 	DB	$21, $00
 	DB	"PASSED"
 	DB 	$00
