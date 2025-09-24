@@ -1,10 +1,10 @@
-; TODO: NMI interrupt handler at $0066
+; TODO: NMI interrupt handler at $0066.
 
 	ORG	$0000
 
 	DI
 
-; PIO initialization
+; PIO initialization.
 	LD	A, $07
 	OUT	($31), A
 	OUT	($33), A
@@ -21,19 +21,19 @@
 	OUT	($36), A
 	LD	E, A
 
-; GDP initialization
+; GDP initialization.
 	XOR	A
 	OUT	($21), A
 
-; Select and lower GDP pen
+; Select and lower the GDP pen.
 	LD	A, $03
 	OUT	($21), A
 
-	LD	A, $04  ; Clear GDP image...
+	LD	A, $04  ; Clear the GDP image.
 	LD	HL, gdp_cmd_ret
 	JP	gdp_cmd
 gdp_cmd_ret:
-	LD	A, $05  ; ...and place the pen at the left edge.
+	LD	A, $05  ; Place the pen at the left edge.
 	LD	HL, gdp_cmd_ret_2
 	JP	gdp_cmd
 gdp_cmd_ret_2:
@@ -41,7 +41,7 @@ gdp_cmd_ret_2:
 	OUT	($39), A
 	OUT	($30), A
 
-; AVDC initialization
+; AVDC initialization.
 	LD	A, $00
 	OUT	($39), A
 	LD	HL, delay_ret
@@ -50,11 +50,11 @@ delay_ret:
 	LD	HL, data_avdc_init
 	XOR	A
 
-; SS1 := 0
+; Set SS1 to 0.
 	OUT	($3E), A
 	OUT	($3F), A
 
-; SS2 := 0
+; Set SS2 to 0.
 	OUT	($3A), A
 	OUT	($3B), A
 
@@ -67,7 +67,7 @@ delay_ret:
 	LD	A, $3D
 	OUT	($39), A
 
-; AVDC cursor address := 0
+; Set AVDC cursor address to 0.
 	XOR	A
 	OUT	($3D), A
 	OUT	($3C), A
@@ -80,15 +80,15 @@ delay_ret:
 	LD	A, H
 	OUT	($38), A
 
-; Fill AVDC framebuffer with spaces
+; Fill the AVDC framebuffer with spaces.
 	LD	A, $20
 	OUT	($34), A
 	XOR	A
 	OUT	($35), A
-	LD	A, $BB  ; Write from cursor to pointer
+	LD	A, $BB  ; Write from cursor to pointer.
 	OUT	($39), A
 
-; GDP pen Y coordinate := 100
+; Set GDP pen Y coordinate to 100.
 	LD	A, $64
 	OUT	($2B), A
 
@@ -115,12 +115,12 @@ write_string_ret_2:
 	LD	HL, fill_ram_ret
 	JP	fill_ram
 fill_ram_ret:
-	OUT	($90), A  ; Switch to bank 2
+	OUT	($90), A  ; Switch to bank 2.
 	LD	A, $00
 	LD	HL, fill_ram_ret_2
 	JP	fill_ram
 fill_ram_ret_2:
-	OUT	($88), A  ; Switch back to bank 1
+	OUT	($88), A  ; Switch back to bank 1.
 	LD	B, $00
 
 repeat_with_cpl:
@@ -131,7 +131,7 @@ repeat_with_cpl:
 	LD	HL, fill_ram_addr_ret
 	JP	fill_ram_addr
 fill_ram_addr_ret:
-	OUT	($90), A  ; Switch to bank 2
+	OUT	($90), A  ; Switch to bank 2.
 	LD	A, $01
 	EXX
 	LD	HL, $2000
@@ -139,7 +139,7 @@ fill_ram_addr_ret:
 	LD	HL, fill_ram_addr_ret_2
 	JP	fill_ram_addr
 fill_ram_addr_ret_2:
-	OUT	($88), A  ; Switch back to bank 1
+	OUT	($88), A  ; Switch back to bank 1.
 	LD	A, $00
 	EXX
 	LD	HL, $2000
@@ -147,7 +147,7 @@ fill_ram_addr_ret_2:
 	LD	HL, check_ram_addr_ret
 	JP	check_ram_addr
 check_ram_addr_ret:
-	OUT	($90), A  ; Switch to bank 2
+	OUT	($90), A  ; Switch to bank 2.
 	LD	A, $01
 	EXX
 	LD	HL, $2000
@@ -155,9 +155,9 @@ check_ram_addr_ret:
 	LD	HL, check_ram_addr_ret_2
 	JP	check_ram_addr
 check_ram_addr_ret_2:
-	OUT	($88), A  ; Switch back to bank 1
+	OUT	($88), A  ; Switch back to bank 1.
 
-	; TEST SHARED MEMORY
+; Test shared memory.
 	LD	A, $00
 	EXX
 	LD	HL, $C000
@@ -172,7 +172,7 @@ fill_ram_addr_ret_3:
 	LD	HL, check_ram_addr_ret_3
 	JP	check_ram_addr
 check_ram_addr_ret_3:
-	OUT	($90), A  ; Switch to bank 2
+	OUT	($90), A  ; Switch to bank 2.
 	LD	A, $00
 	EXX
 	LD	HL, $C000
@@ -190,12 +190,12 @@ check_ram_addr_ret_4:
 	LD	HL, fill_ram_ret_3
 	JP	fill_ram
 fill_ram_ret_3:
-	OUT	($90), A  ; Switch to bank 2
+	OUT	($90), A  ; Switch to bank 2.
 	LD	A, $FF
 	LD	HL, fill_ram_ret_4
 	JP	fill_ram
 fill_ram_ret_4:
-	OUT	($88), A  ; Switch back to bank 1
+	OUT	($88), A  ; Switch back to bank 1.
 	LD	B, $01
 	JP	repeat_with_cpl
 
@@ -271,7 +271,7 @@ write_string_ret_4:
 	JP	write_string
 write_string_ret_5:
 	EXX
-	; Select drawing mode.
+; Select drawing mode.
 	XOR	A
 	JP	gdp_cmd
 
@@ -359,7 +359,7 @@ write_hex_8_6:
 
 ; Entry point to memory test.
 
-; Fills RAM $2000-$FFFF with what's in A
+; Fill RAM $2000–$FFFF with the value in A.
 fill_ram:
 	EXX
 	LD	E, A
@@ -377,14 +377,14 @@ fill_ram_gdp_cmd_ret:
 	EXX
 	JP	(HL)
 
-; Fills RAM HL'-$BFFF or $FFFF with addr (xor-ed hi and lo byte xor-ed with what's in A)
-; or the complement of that (if B is set to non-zero)
+; Fill RAM HL'–$BFFF or $FFFF with addr (XOR of high and low bytes XORed with A).
+; Or the complement of that (if B is non-zero).
 fill_ram_addr:
 	EXX
-	; HL is passed in by the caller
+; HL is passed in by the caller.
 	LD	E, A
 fill_ram_addr_loop:
-	; check if $00 or $FF before writing
+; Check if $00 or $FF before writing.
 	LD	A, (HL)
 	LD	D, A
 	EXX
@@ -400,7 +400,7 @@ fill_ram_addr_skip_cpl:
 	LD	A, H
 	XOR	L
 	XOR	E
-	; complement?
+; Complement?
 	LD	D, A
 	EXX
 	LD	A, B
@@ -431,13 +431,13 @@ fill_ram_addr_gdp_cmd_ret:
 	EXX
 	JP	(HL)
 fill_ram_addr_fail:
-	; HL - address
-	; $00 - expected
-	; A - actual
+; HL: address
+; $00: expected
+; A: actual
 	LD	E, A
 	LD	B, H
 	LD	C, L
-	; print address
+; Print address.
 	LD	A, $20
 	LD	HL, fill_ram_addr_gdp_cmd_ret_2
 	JP	gdp_cmd
@@ -445,7 +445,7 @@ fill_ram_addr_gdp_cmd_ret_2:
 	LD	HL, fill_ram_addr_write_hex_16_ret
 	JP	write_hex_16
 fill_ram_addr_write_hex_16_ret:
-	; print expected
+; Print expected.
 	LD	A, $20
 	LD	HL, fill_ram_addr_gdp_cmd_ret_3
 	JP	gdp_cmd
@@ -454,7 +454,7 @@ fill_ram_addr_gdp_cmd_ret_3:
 	LD	HL, fill_ram_addr_write_hex_8_ret
 	JP	write_hex_8
 fill_ram_addr_write_hex_8_ret:
-	; print actual
+; Print actual.
 	LD	A, $20
 	LD	HL, fill_ram_addr_gdp_cmd_ret_4
 	JP	gdp_cmd
@@ -465,17 +465,17 @@ fill_ram_addr_gdp_cmd_ret_4:
 fill_ram_addr_write_hex_8_ret_2:
 	HALT
 
-; Checks RAM HL'-$BFFF or $FFFF if addr is there (xor-ed hi and lo byte xor-ed with what's in A)
-; or the complement of that (if B is set to non-zero)
+; Check RAM HL'–$BFFF or $FFFF for addr (XOR of high and low bytes XORed with A).
+; Or the complement of that (if B is non-zero).
 check_ram_addr:
 	EXX
-	; HL is passed in by the caller
+; HL is passed in by the caller.
 	LD	E, A
 check_ram_addr_loop:
 	LD	A, H
 	XOR	L
 	XOR	E
-	; complement?
+; Complement?
 	LD	D, A
 	EXX
 	LD	A, B
@@ -509,14 +509,14 @@ check_ram_addr_gdp_cmd_ret:
 	EXX
 	JP	(HL)
 check_ram_addr_fail:
-	; HL - address
-	; B - expected
-	; A - actual
+; HL: address
+; B: expected
+; A: actual
 	LD	E, A
 	LD	D, B
 	LD	B, H
 	LD	C, L
-	; print address
+; Print address.
 	LD	A, $20
 	LD	HL, check_ram_addr_gdp_cmd_ret_2
 	JP	gdp_cmd
@@ -524,7 +524,7 @@ check_ram_addr_gdp_cmd_ret_2:
 	LD	HL, check_ram_addr_write_hex_16_ret
 	JP	write_hex_16
 check_ram_addr_write_hex_16_ret:
-	; print expected
+; Print expected.
 	LD	A, $20
 	LD	HL, check_ram_addr_gdp_cmd_ret_3
 	JP	gdp_cmd
@@ -533,7 +533,7 @@ check_ram_addr_gdp_cmd_ret_3:
 	LD	HL, check_ram_addr_write_hex_8_ret
 	JP	write_hex_8
 check_ram_addr_write_hex_8_ret:
-	; print actual
+; Print actual.
 	LD	A, $20
 	LD	HL, check_ram_addr_gdp_cmd_ret_4
 	JP	gdp_cmd
