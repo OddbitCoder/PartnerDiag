@@ -35,11 +35,11 @@
 
 	LD	A,0x04	; Pocxistimo GDP sliko...
 	LD HL,GDPUkaz_ret_1
-	JP	GDPUkaz2
+	JP	gdp_cmd
 GDPUkaz_ret_1:
 	LD	A,0x05	; ...in postavimo pero na levi rob.
 	LD HL,GDPUkaz_ret_2
-	JP	GDPUkaz2
+	JP	gdp_cmd
 GDPUkaz_ret_2:
 	XOR	A
 	OUT	(0x39),A
@@ -108,7 +108,7 @@ IzpisiNiz_ret:
 ; Spet postavimo pero na levi rob.
 	LD	A,0x05
 	LD HL,GDPUkaz_ret
-	JP	GDPUkaz2
+	JP	gdp_cmd
 GDPUkaz_ret:
 
 	LD HL,Prelom_ret_2
@@ -120,135 +120,106 @@ Prelom_ret_2:
 	JP	IzpisiNiz2
 IzpisiNiz_ret_3:
 
-;	LD HL,DataBusTest_ret
-;	JP DataBusTest
-;DataBusTest_ret:
-
+	LD A,0
 	LD HL,FillRamZero_ret
-	JP FillRamZero
+	JP fill_ram
 FillRamZero_ret:
 
 	; Checkpoint
-	LD A,'*'
+	LD A,'+'
 	LD HL,GdpUkaz_ret_6
-	JP GDPUkaz2
+	JP gdp_cmd
 GdpUkaz_ret_6:
 
 	OUT	(0x90),A ; Switch to bank 2
 
+	LD A,0
 	LD HL,FillRamZero_ret_2
-	JP FillRamZero
+	JP fill_ram
 FillRamZero_ret_2:
 
 	; Checkpoint
-	LD A,'*'
+	LD A,'+'
 	LD HL,GdpUkaz_ret_7
-	JP GDPUkaz2
+	JP gdp_cmd
 GdpUkaz_ret_7:
 
 	OUT	(0x88),A ; Switch back to bank 1
 
-;	; Address Bus Test
-;	LD      BC,0001h                ; B=high, C=low mask
-;MASK_LOOP:
-;    ; probe = 2000h OR BC   (always within 2000h..FFFFh)
-;	LD      L,C
-;	LD      H,B
-;	SET     5,H        ; equivalent to OR 20h on the high byte
-;    ; write FF at probe (bank 1)
-;    LD      (HL),FFh
-;    ; PERFORM CHECKS
-;    ; BANK 1 needs to be zeros and $FF at probe
-;
-;    LD HL,CheckRamVals_ret_2
-;    LD D,$11 ; test for probe (yes) + memory bank reference
-;    JP CheckRamVals
-;CheckRamVals_ret_2:
+	LD B,0
+	LD A,0
+	EXX
+	LD HL,$2000
+	EXX
+	LD HL,fill_ram_addr_ret
+	JP fill_ram_addr
+fill_ram_addr_ret:
 
-;    ; BANK 2 needs to be all zeros
+	OUT	(0x90),A ; Switch to bank 2
 
-;    OUT	(0x90),A ; Switch to bank 2
+	LD B,0
+	LD A,1
+	EXX
+	LD HL,$2000
+	EXX
+	LD HL,fill_ram_addr_ret_2
+	JP fill_ram_addr
+fill_ram_addr_ret_2:
 
-;    LD HL,CheckRamVals_ret
-;    LD D,$02 ; test for probe (no) + memory bank reference
-;    JP CheckRamVals
-;CheckRamVals_ret:
+	OUT	(0x88),A ; Switch back to bank 1
 
-;	LD      L,C
-;	LD      H,B
-;	SET     5,H
+	LD B,0
+	LD A,0
+	EXX
+	LD HL,$2000
+	EXX
+	LD HL,check_ram_addr_ret
+	JP check_ram_addr
+check_ram_addr_ret:
 
-; remove probe (bank 1)
-;	OUT	(0x88),A
-;    LD      (HL),0
+	OUT	(0x90),A ; Switch to bank 2
 
-; write FF at probe (bank 2)
-;	OUT	(0x90),A
-;    LD      (HL),FFh
-;    ; PERFORM CHECKS
-;	LD HL,CheckRamVals_ret_3
-;    LD D,$12 ; test for probe (yes) + memory bank reference
-;    JP CheckRamVals
-;CheckRamVals_ret_3:
+	LD B,0
+	LD A,1
+	EXX
+	LD HL,$2000
+	EXX
+	LD HL,check_ram_addr_ret_2
+	JP check_ram_addr
+check_ram_addr_ret_2:
 
-;	OUT	(0x88),A ; switch to bank 1
+	OUT	(0x88),A ; Switch back to bank 1
 
-;	LD HL,CheckRamVals_ret_4
-;    LD D,$01 ; test for probe (no) + memory bank reference
-;    JP CheckRamVals
-;CheckRamVals_ret_4:
+	; TEST SHARED MEMORY
 
-; remove probe
-;	OUT	(0x90),A
-;	LD   H,B
-;	LD   L,C
-;	SET 5,H
-;	LD      (HL),0
+	LD B,0
+	LD A,0
+	EXX
+	LD HL,$C000
+	EXX
+	LD HL,fill_ram_addr_ret_3
+	JP fill_ram_addr
+fill_ram_addr_ret_3:
 
-;	OUT	(0x88),A
+	LD B,0
+	LD A,0
+	EXX
+	LD HL,$C000
+	EXX
+	LD HL,check_ram_addr_ret_3
+	JP check_ram_addr
+check_ram_addr_ret_3:
 
-;	; CHECKPOINT
-;	LD A,'A'
-;	LD HL,GdpUkaz_ret_8
-;	JP GDPUkaz2
-;GdpUkaz_ret_8:
+	OUT	(0x90),A ; Switch to bank 2
 
-	; INCREASE PROBE COUNTER (BC)
-;	SLA C
-;	RL B
-; 	LD   A,B
-;    OR   C
-;    JR   NZ, MASK_LOOP
-
-    LD HL,ram_test_ret
-    LD BC,00h
-    JP RamTest
-ram_test_ret:
-
-; AFTER THIS TEST, WE NEED TO AGAIN SET C000-FFFF TO ZERO (SHARED MEMORY)
-
-	OUT	(0x90),A
-
-    LD HL,ram_test_ret_2
-    LD BC,01h
-    JP RamTest
-ram_test_ret_2:
-
-	OUT	(0x88),A
-
-    LD HL,ram_test_ret_3
-    LD BC,10h
-    JP RamTest
-ram_test_ret_3:
-
-	OUT	(0x90),A
-
-    LD HL,ram_test_ret_4
-    LD BC,11h
-    JP RamTest
-ram_test_ret_4:
-
-	OUT	(0x88),A
+	LD B,0
+	LD A,0
+	EXX
+	LD HL,$C000
+	EXX
+	LD HL,check_ram_addr_ret_4
+	JP check_ram_addr
+check_ram_addr_ret_4:
 
 	LD HL,Prelom_ret_4
 	JP PrelomVrstice2
@@ -288,7 +259,7 @@ sporocilo_zagon:
 	DB	"Memory Test"
 	DB 	$00
 
-GDPUkaz2:
+gdp_cmd:
 	EX	AF,AF'
 x00B3:
 	IN	A,(0x20)
@@ -337,7 +308,7 @@ IzpisiNiz_ret_2:
 	EXX
 ; Izberemo nacxin risanja.
 	XOR	A
-	JP	GDPUkaz2
+	JP	gdp_cmd
 
 IzpisiNiz2:
 	IN	A,(0x20)
@@ -363,22 +334,22 @@ skip:
 	INC	BC
 	JR	x0251_2
 
-IzpisiHex16_2:
+write_hex_16:
 	LD	A,B
 	EXX
 	LD HL,Izpis_ret
-	JP	IzpisiHex8_2
+	JP	write_hex_8
 Izpis_ret:
 	EXX
 	LD	A,C
 	EXX
 	LD HL,Izpis_ret_2
-	JP	IzpisiHex8_2
+	JP	write_hex_8
 Izpis_ret_2
 	EXX
 	JP (HL)
 
-IzpisiHex8_2:
+write_hex_8:
 	LD	B,A
 	SRA	A
 	SRA	A
@@ -425,258 +396,6 @@ x009B_3_2:
 
 ; Vstopna tocxka v memory test.
 
-RamTest:
-	EXX
-	; B' - complement (yes/no)
-	; C' - number to add to the address
-	LD BC, 2000h ; start address
-RamTest_loop:
-	; write
-	LD A,B
-	XOR C
-	EXX
-	XOR C
-	EX AF,AF'
-	LD A,B
-	OR A ; check if B is zero
-	JR Z,is_zero
-	EX AF,AF'
-	CPL
-	EX AF,AF'
-is_zero:
-	EX AF,AF'
-	EXX
-	; check if (BC) is 0 before writing
-	LD D,A
-	LD A,(BC)
-	LD E,A ; actual = (BC)
-	OR A ; check if 0
-	JR NZ,is_zero_fail
-	JR ok
-is_zero_fail:
-	LD D,0 ; expected = 0
-	JR RamTest_fail
-ok:
-	LD A,D
-	LD (BC),A
-	; read & check
-	LD A,(BC)
-	LD E,A
-	XOR D
-	JR NZ,RamTest_fail
-	INC BC
-	LD   A,B
-    OR   C
-    JR   NZ, RamTest_loop ; did we go over $FFFF?
-    LD	A,'M'
-	LD HL,GDPUkaz_ret_8
-	JP	GDPUkaz2
-GDPUkaz_ret_8:
-    EXX
-    JP (HL)
-RamTest_fail:
-	; D - expected
-	; E - actual
-	; BC - address
-	LD A,' '
-	LD HL,gdp_ukaz_ret_5
-	JP GDPUkaz2
-gdp_ukaz_ret_5:
-	LD HL,izpisi_16_ret_3
-	JP IzpisiHex16_2
-izpisi_16_ret_3:
-	LD A,' '
-	LD HL,gdp_ukaz_ret_6
-	JP GDPUkaz2
-gdp_ukaz_ret_6:
-	LD A,D
-	LD HL,izpisi_8_ret_3
-	JP IzpisiHex8_2
-izpisi_8_ret_3:
-	LD A,' '
-	LD HL,gdp_ukaz_ret_7
-	JP GDPUkaz2
-gdp_ukaz_ret_7:
-	LD A,E
-	LD HL,izpisi_8_ret_4
-	JP IzpisiHex8_2
-izpisi_8_ret_4:
-
-	HALT
-
-DataBusTest:
-
-	EXX
-
-    LD      HL,2000h        ; test location
-    LD      B,8             ; 8 data lines
-    LD      A,01h           ; start with 0000 0001
-
-DBUS_LOOP:
-; --- Walking 1s ---
-	LD      (HL),A
-	LD      E,(HL)
-	CP      E
-	JR      NZ,DBUS_FAIL    ; if mismatch, bail
-
-; --- Walking 0s (complement) ---
-    CPL                     ; complement A (walking 0s)
-    LD      (HL),A
-    LD      E,(HL)
-    CP      E
-    JR      NZ,DBUS_FAIL
-
-    CPL                     ; restore original walking-1s
-    RLCA                    ; rotate left to next bit
-    DJNZ    DBUS_LOOP
-
-DBUS_PASS:
-	LD	A,'D'
-	LD HL,GDPUkaz_ret_3
-	JP	GDPUkaz2
-GDPUkaz_ret_3:
-	EXX
-	JP (HL)
-
-DBUS_FAIL:
-	LD D,A
-	; D = expected, E = actual
-; Print expected
-	LD A,D
-	LD HL,Izpis_hex_1
-	JP IzpisiHex8_2
-Izpis_hex_1:
-; Print actual
-	LD A,' '
-	LD HL,GDPUkaz_ret_5
-	JP	GDPUkaz2
-GDPUkaz_ret_5:
-	LD A,E
-	LD HL,Izpis_hex_2
-	JP IzpisiHex8_2
-Izpis_hex_2:
-	HALT
-
-; ----------------------------------------
-
-FillRamZero:
-    EXX
-    LD      HL,2000h
-    XOR     A
-    LD      (HL),A           ; place one zero at 2000h
-    LD      DE,2001h
-    LD      BC,0DFFFh        ; remaining bytes: E000 - 1
-    LDIR                        ; copy zero from 2000h to 2001h..FFFFh
-    EXX
-    JP      (HL)
-
-CheckRamVals:
-	EXX
-
-	; BC' = counter => probe address can be computed
-	; D' = [test for probe?][memory bank reference]
-
-    LD      HL,2000h         ; start
-    LD      BC,0E000h        ; count = 2000h..FFFFh (57344 bytes)
-
-_loop:
-    LD      A,(HL)           ; fetch byte
-    OR      A                ; Z=1 if byte == 0
-    JR      NZ,_not_zero     ; bail if any non-zero
-_continue:
-    INC     HL
-    DEC     BC
-    LD      A,B              ; test BC != 0 without affecting HL
-    OR      C
-    JR      NZ,_loop
-
-    ; success
-    EXX
-    JP      (HL)
-
-_not_zero:
-	; do we want to test for probe?
-	EXX
-	LD A,D
-	EXX
-	AND  F0h        ; isolate high nibble
-	JR   Z, _fail ; if result is zero, flag was false
-	; HERE, WE DO WANT TO TEST THE PROBE
-	; check if BC' equals HL, then we want $FF instead
-	EXX
-	LD A,B
-	EXX
-	SET 5,A
-	CP H
-	JR NZ,_fail
-	EXX
-	LD A,C
-	EXX
-	CP L
-	JR NZ,_fail
-	; BC' == HL
-	LD      A,(HL)
-	CP FFh
-	JR Z,_continue
-_fail:
-	; BC' = probe counter
-	; HL = address being checked
-	; D' = function parameters
-	; (HL) = actual value
-	; expected = if (probe address)==HL, then FF, else 00
-; DE = probe address
-	EXX
-	LD A,B
-	EXX
-	LD D,A
-	EXX
-	LD A,C
-	EXX
-	LD E,A
-	SET 5,D
-; Print HL
-	LD B,H
-	LD C,L
-	LD A,' '
-	LD HL,gdp_ukaz_ret
-	JP GDPUkaz2
-gdp_ukaz_ret:
-	LD HL,izpisi_16_ret
-	JP IzpisiHex16_2
-izpisi_16_ret:
-; print actual value
-	LD A,' '
-	LD HL,gdp_ukaz_ret_2
-	JP GDPUkaz2
-gdp_ukaz_ret_2:
-	LD A,(BC)
-	LD HL,Izpis_hex_1_2
-	JP IzpisiHex8_2
-Izpis_hex_1_2:
-; print parameters
-	LD A,' '
-	LD HL,gdp_ukaz_ret_3
-	JP GDPUkaz2
-gdp_ukaz_ret_3:
-	EXX
-	LD A,D
-	EXX
-	LD HL,Izpis_hex_1_4
-	JP IzpisiHex8_2
-Izpis_hex_1_4:
-; print probe address
-	LD A,' '
-	LD HL,gdp_ukaz_ret_4
-	JP GDPUkaz2
-gdp_ukaz_ret_4:
-	LD B,D
-	LD C,E
-	LD HL,izpisi_16_ret_2
-	JP IzpisiHex16_2
-izpisi_16_ret_2:
-
-	HALT
-
 ; fills RAM $2000-$FFFF with what's in A
 fill_ram:
 	EXX
@@ -691,12 +410,12 @@ fill_ram_loop:
 	EXX
 	JP (HL)
 
-; fills RAM $2000-$BFFF with addr (xor-ed hi and lo byte xor-ed with what's in A)
+; fills RAM HL'-$BFFF or $FFFF with addr (xor-ed hi and lo byte xor-ed with what's in A)
 ; or the complement of that (if B is set to non-zero)
 fill_ram_addr:
 	EXX
+	; HL is passed in by the caller
 	LD E,A
-	LD HL,$2000
 fill_ram_addr_loop:
 	; check if 0 before writing
 	LD A,(HL)
@@ -719,7 +438,20 @@ fill_ram_addr_skip_cpl:
 	INC HL
 	LD A,H
 	CP $C0
+	JR NZ,fill_ram_addr_not_C000
+	LD A,L
+	OR A
+	JR NZ,fill_ram_addr_not_C000
+	JR fill_ram_addr_done
+fill_ram_addr_not_C000:
+	LD A,H
+	OR L
 	JR NZ,fill_ram_addr_loop
+fill_ram_addr_done:
+	LD A,'*'
+	LD HL,fill_ram_addr_gdp_cmd_ret
+	JP gdp_cmd
+fill_ram_addr_gdp_cmd_ret:
 	EXX
 	JP (HL)
 fill_ram_addr_fail:
@@ -727,42 +459,42 @@ fill_ram_addr_fail:
 	; 0 - expected
 	; A - actual
 	LD E,A
-	; print address
-	LD A,' '
-	LD HL,fill_ram_addr_gdp_cmd_ret
-	JP GDPUkaz2
-fill_ram_addr_gdp_cmd_ret:
 	LD B,H
 	LD C,L
+	; print address
+	LD A,' '
+	LD HL,fill_ram_addr_gdp_cmd_ret_2
+	JP gdp_cmd
+fill_ram_addr_gdp_cmd_ret_2:
 	LD HL,fill_ram_addr_write_hex_16_ret
-	JP IzpisiHex16_2
+	JP write_hex_16
 fill_ram_addr_write_hex_16_ret:
 	; print expected
 	LD A,' '
-	LD HL,fill_ram_addr_gdp_cmd_ret_2
-	JP GDPUkaz2
-fill_ram_addr_gdp_cmd_ret_2:
+	LD HL,fill_ram_addr_gdp_cmd_ret_3
+	JP gdp_cmd
+fill_ram_addr_gdp_cmd_ret_3:
 	LD A,0
 	LD HL,fill_ram_addr_write_hex_8_ret
-	JP IzpisiHex8_2
+	JP write_hex_8
 fill_ram_addr_write_hex_8_ret:
 	; print actual
 	LD A,' '
-	LD HL,fill_ram_addr_gdp_cmd_ret_2
-	JP GDPUkaz2
-fill_ram_addr_gdp_cmd_ret_2:
+	LD HL,fill_ram_addr_gdp_cmd_ret_4
+	JP gdp_cmd
+fill_ram_addr_gdp_cmd_ret_4:
 	LD A,E
-	LD HL,fill_ram_addr_write_hex_8_ret
-	JP IzpisiHex8_2
-fill_ram_addr_write_hex_8_ret:
+	LD HL,fill_ram_addr_write_hex_8_ret_2
+	JP write_hex_8
+fill_ram_addr_write_hex_8_ret_2:
 	HALT
 
-; checks RAM $2000-$BFFF if addr correctly written (xor-ed hi and lo byte xor-ed with what's in A)
+; checks RAM HL'-$BFFF or $FFFF if addr is there (xor-ed hi and lo byte xor-ed with what's in A)
 ; or the complement of that (if B is set to non-zero)
 check_ram_addr:
 	EXX
+	; HL is passed in by the caller
 	LD E,A
-	LD HL,$2000
 check_ram_addr_loop:
 	LD A,H
 	XOR L
@@ -777,101 +509,63 @@ check_ram_addr_loop:
 	JR Z,check_ram_addr_skip_cpl ; Z/NZ from OR
 	CPL
 check_ram_addr_skip_cpl:
-	; A == (HL)?
-	LD D,(HL)
-	CP D
+	LD B,A
+	LD A,(HL)
+	CP B
 	JR NZ,check_ram_addr_fail
 	INC HL
 	LD A,H
 	CP $C0
+	JR NZ,check_ram_addr_not_C000
+	LD A,L
+	OR A
+	JR NZ,check_ram_addr_not_C000
+	JR check_ram_addr_done
+check_ram_addr_not_C000:
+	LD A,H
+	OR L
 	JR NZ,check_ram_addr_loop
+check_ram_addr_done:
+	LD A,'*'
+	LD HL,check_ram_addr_gdp_cmd_ret
+	JP gdp_cmd
+check_ram_addr_gdp_cmd_ret:
 	EXX
 	JP (HL)
 check_ram_addr_fail:
 	; HL - address
-	; A - expected
-	; D - actual
-	HALT
-
-; fills RAM $C000-$FFFF with addr (xor-ed hi and lo byte)
-; or the complement of that (if B is set to non-zero)
-fill_ram_addr_shared:
-	EXX
-	LD HL,$C000
-fill_ram_addr_shared_loop:
-	; check if 0 before writing
-	LD A,(HL)
-	OR A
-	JR NZ,fill_ram_addr_shared_fail
-	OUT ($90),A ; bank 2
-	LD A,(HL)
-	OR A
-	JR NZ,fill_ram_addr_shared_fail
-	OUT ($88),A ; back to bank 1
-	LD A,H
-	XOR L
-	; complement?
-	LD D,A
-	EXX
-	LD A,B
-	OR A
-	EXX
-	LD A,D
-	JR Z,fill_ram_addr_shared_skip_cpl ; Z/NZ from OR
-	CPL
-fill_ram_addr_shared_skip_cpl:
-	LD (HL),A
-	INC HL
-	LD A,H
-	OR L
-	JR NZ,fill_ram_addr_shared_loop
-	EXX
-	JP (HL)
-fill_ram_addr_shared_fail:
-	; HL - address
-	; 0 - expected
+	; B - expected
 	; A - actual
-	HALT
-
-; checks RAM $C000-$FFFF if addr correctly written (xor-ed hi and lo byte xor-ed with what's in A)
-; or the complement of that (if B is set to non-zero)
-check_ram_addr_shared:
-	EXX
 	LD E,A
-	LD HL,$C000
-check_ram_addr_shared_loop:
-	LD A,H
-	XOR L
-	XOR E
-	; complement?
-	LD D,A
-	EXX
-	LD A,B
-	OR A
-	EXX
+	LD D,B
+	LD B,H
+	LD C,L
+	; print address
+	LD A,' '
+	LD HL,check_ram_addr_gdp_cmd_ret_2
+	JP gdp_cmd
+check_ram_addr_gdp_cmd_ret_2:
+	LD HL,check_ram_addr_write_hex_16_ret
+	JP write_hex_16
+check_ram_addr_write_hex_16_ret:
+	; print expected
+	LD A,' '
+	LD HL,check_ram_addr_gdp_cmd_ret_3
+	JP gdp_cmd
+check_ram_addr_gdp_cmd_ret_3:
 	LD A,D
-	JR Z,check_ram_addr_shared_skip_cpl ; Z/NZ from OR
-	CPL
-check_ram_addr_shared_skip_cpl:
-	; A == (HL)?
-	LD D,(HL)
-	CP D
-	JR NZ,check_ram_addr_shared_fail
-	OUT ($90),A ; bank 2
-	LD D,(HL)
-	CP D
-	JR NZ,check_ram_addr_shared_fail
-	OUT ($88),A ; back to bank 1
-	INC HL
-	LD A,H
-	OR L
-	JR NZ,check_ram_addr_shared_loop
-	EXX
-	JP (HL)
-check_ram_addr_shared_fail:
-	; HL - address
-	; A - expected
-	; D - actual
+	LD HL,check_ram_addr_write_hex_8_ret
+	JP write_hex_8
+check_ram_addr_write_hex_8_ret:
+	; print actual
+	LD A,' '
+	LD HL,check_ram_addr_gdp_cmd_ret_4
+	JP gdp_cmd
+check_ram_addr_gdp_cmd_ret_4:
+	LD A,E
+	LD HL,check_ram_addr_write_hex_8_ret_2
+	JP write_hex_8
+check_ram_addr_write_hex_8_ret_2:
 	HALT
 
 ; ----------------------------------------
