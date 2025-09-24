@@ -1,3 +1,17 @@
+;
+;  _____ _____  _____    __  __ ______ __  __   _______ ______  _____ _______ 
+; |_   _|  __ \|  __ \  |  \/  |  ____|  \/  | |__   __|  ____|/ ____|__   __|
+;   | | | |  | | |__) | | \  / | |__  | \  / |    | |  | |__  | (___    | |   
+;   | | | |  | |  ___/  | |\/| |  __| | |\/| |    | |  |  __|  \___ \   | |   
+;  _| |_| |__| | |      | |  | | |____| |  | |    | |  | |____ ____) |  | |   
+; |_____|_____/|_|      |_|  |_|______|_|  |_|    |_|  |______|_____/   |_|   
+;
+; This is an IDP-G ROM for memory testing. It does not use the stack or RAM.
+; It does not boot IDP. It halts after the test.                           
+;                                             
+; Created by Oddbit Retro, September 2025 
+;
+
 	DI
 
 ; PIO initialization.
