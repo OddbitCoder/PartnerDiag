@@ -1,20 +1,20 @@
 ;
-;  _____ _____  _____    __  __ ______ __  __   _______ ______  _____ _______ 
+;  _____ _____  _____    __  __ ______ __  __   _______ ______  _____ _______
 ; |_   _|  __ \|  __ \  |  \/  |  ____|  \/  | |__   __|  ____|/ ____|__   __|
-;   | | | |  | | |__) | | \  / | |__  | \  / |    | |  | |__  | (___    | |   
-;   | | | |  | |  ___/  | |\/| |  __| | |\/| |    | |  |  __|  \___ \   | |   
-;  _| |_| |__| | |      | |  | | |____| |  | |    | |  | |____ ____) |  | |   
-; |_____|_____/|_|      |_|  |_|______|_|  |_|    |_|  |______|_____/   |_|   
+;   | | | |  | | |__) | | \  / | |__  | \  / |    | |  | |__  | (___    | |
+;   | | | |  | |  ___/  | |\/| |  __| | |\/| |    | |  |  __|  \___ \   | |
+;  _| |_| |__| | |      | |  | | |____| |  | |    | |  | |____ ____) |  | |
+; |_____|_____/|_|      |_|  |_|______|_|  |_|    |_|  |______|_____/   |_|
 ;
-; This is an IDP-G ROM for memory testing. It does not use the stack or RAM.
-; It does not boot IDP. It halts after the test.                           
-;                                             
-; Created by Oddbit Retro, September 2025 
+; This is an IDP-G ROM for memory testing. It does not use the stack or RAM.  
+; It does not boot IDP. The test repeats indefinitely.
+;
+; Created by Oddbit Retro, September 2025
 ;
 
 	DI
 
-; PIO initialization.
+; GDP PIO initialization.
 	LD	A, $07
 	OUT	($31), A
 	OUT	($33), A
@@ -109,6 +109,13 @@ line_break_ret:
 	LD	BC, string_startup
 	JP	write_string
 write_string_ret:
+	LD	HL, line_break_1
+	JP	line_break
+line_break_1:
+	LD	HL, write_string_ret_1
+	LD	BC, string_version
+	JP	write_string
+write_string_ret_1:
 ; Place the pen at the left edge again.
 	LD	A, $05
 	LD	HL, gdp_cmd_ret_3
@@ -217,7 +224,8 @@ line_break_ret_2:
 	LD	BC, string_passed
 	JP	write_string
 write_string_ret_3:
-	HALT
+	;HALT
+	JP gdp_cmd_ret_3 ; Repeat memory test.
 
 ; AVDC initialization string.
 data_avdc_init:
@@ -556,12 +564,17 @@ check_ram_addr_write_hex_8_ret_2:
 
 string_startup:
 	DB	$A8, $00
-	DB	"Memory Test"
+	DB	"Oddbit ROM"
+	DB	$00
+
+string_version:
+	DB	$21, $00
+	DB	"[Memory Test v1.0]"
 	DB	$00
 
 string_testing_memory:
 	DB	$21, $00
-	DB	"TESTING "
+	DB	"TESTING MEMORY "
 	DB	$00
 
 string_passed:
