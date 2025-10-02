@@ -6,7 +6,7 @@
 ;  _| |_| |__| | |      | |  | | |____| |  | |    | |  | |____ ____) |  | |
 ; |_____|_____/|_|      |_|  |_|______|_|  |_|    |_|  |______|_____/   |_|
 ;
-; This is an IDP-G ROM for memory testing. It does not use the stack or RAM.  
+; This is an IDP-G ROM for memory testing. It does not use the stack or RAM.
 ; It does not boot IDP. The test repeats indefinitely.
 ;
 ; Created by Oddbit Retro, September 2025
@@ -128,12 +128,12 @@ line_break_2:
 	LD	BC, string_testing_memory
 	JP	write_string
 write_string_ret_2:
-	LD	A, $00
+	LD	A, $AA
 	LD	HL, fill_ram_ret
 	JP	fill_ram
 fill_ram_ret:
 	OUT	($90), A  ; Switch to bank 2.
-	LD	A, $00
+	LD	A, $AA
 	LD	HL, fill_ram_ret_2
 	JP	fill_ram
 fill_ram_ret_2:
@@ -203,12 +203,12 @@ check_ram_addr_ret_4:
 	OR	A
 	JR	NZ, done
 
-	LD	A, $FF
+	LD	A, $55
 	LD	HL, fill_ram_ret_3
 	JP	fill_ram
 fill_ram_ret_3:
 	OUT	($90), A  ; Switch to bank 2.
-	LD	A, $FF
+	LD	A, $55
 	LD	HL, fill_ram_ret_4
 	JP	fill_ram
 fill_ram_ret_4:
@@ -402,7 +402,7 @@ fill_ram_addr:
 ; HL is passed in by the caller.
 	LD	E, A
 fill_ram_addr_loop:
-; Check if $00 or $FF before writing.
+; Check if $AA or $55 before writing.
 	LD	A, (HL)
 	LD	D, A
 	EXX
@@ -413,7 +413,7 @@ fill_ram_addr_loop:
 	JR	Z, fill_ram_addr_skip_cpl
 	CPL
 fill_ram_addr_skip_cpl:
-	OR	A
+	CP	$AA
 	JR	NZ, fill_ram_addr_fail
 	LD	A, H
 	XOR	L
@@ -450,7 +450,7 @@ fill_ram_addr_gdp_cmd_ret:
 	JP	(HL)
 fill_ram_addr_fail:
 ; HL: address
-; $00: expected
+; $AA: expected
 ; A: actual
 	LD	E, A
 	LD	B, H
@@ -468,7 +468,7 @@ fill_ram_addr_write_hex_16_ret:
 	LD	HL, fill_ram_addr_gdp_cmd_ret_3
 	JP	gdp_cmd
 fill_ram_addr_gdp_cmd_ret_3:
-	LD	A, $00
+	LD	A, $AA
 	LD	HL, fill_ram_addr_write_hex_8_ret
 	JP	write_hex_8
 fill_ram_addr_write_hex_8_ret:
