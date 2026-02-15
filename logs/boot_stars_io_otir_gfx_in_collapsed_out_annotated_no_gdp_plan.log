@@ -66,7 +66,6 @@
 >>> A3D3	OUT	(#39),A
 *** OUT 39 (AVDC status/command) = 3D    ; instantaneous: cursor on
 >>> A3D6	OUT	(#3D),A
-
 *** OUT 3D (AVDC cursor address upper) = 0    ; cursor_addr_high=00
 >>> A3D8	OUT	(#3C),A
 *** OUT 3C (AVDC cursor address lower) = 0    ; cursor_addr_low=00
@@ -94,17 +93,9 @@
 >>> AA23	JR	NZ,#AA1D
 >>> AA29	IN	A,(#39)
 >>> AA2B	AND	#20
->>> JR Z,#AA29
-
-*** IN 39 (AVDC status/command) = 20    ; split_scr2_int=0, ready_int=0, split_scr1_int=0, line_zero_int=0, vb_int=0, ready_flag=1, bit6_reserved=0, bit7_reserved=0
-*** IN 36 (Common input/Graphic scroll) = 5F    ; bit0_undefined=1, bit1_undefined=1, bit2_undefined=1, bit3_undefined=1, avdc_access_flag=1, bit5_undefined=0, bit6_undefined=1, graph_pix_input=0
-*** IN 36 (Common input/Graphic scroll) = 5E    ; bit0_undefined=0, bit1_undefined=1, bit2_undefined=1, bit3_undefined=1, avdc_access_flag=1, bit5_undefined=0, bit6_undefined=1, graph_pix_input=0
-*** IN 36 (Common input/Graphic scroll) = 4E    ; bit0_undefined=0, bit1_undefined=1, bit2_undefined=1, bit3_undefined=1, avdc_access_flag=0, bit5_undefined=0, bit6_undefined=1, graph_pix_input=0
-*** IN 39 (AVDC status/command) = 20    ; split_scr2_int=0, ready_int=0, split_scr1_int=0, line_zero_int=0, vb_int=0, ready_flag=1, bit6_reserved=0, bit7_reserved=0
-
+>>> ????	JR Z,#AA29
 
 -- STOP HERE --
-
 
 >>> AA8F	OUT	(#3C),A
 *** OUT 3C (AVDC cursor address lower) = 0    ; cursor_addr_low=00

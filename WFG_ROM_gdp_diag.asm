@@ -160,7 +160,7 @@ write_string_ret_2:
 	OUT	($31), A
 	LD	A, $0F
 	OUT	($31), A
-	LD	A, $2A
+	LD	A, '*'
 	CALL	write_char
 	LD	HL, 1000
 	CALL	msleep
@@ -172,7 +172,7 @@ write_string_ret_2:
 	OUT	($33), A
 	LD	A, $07
 	OUT	($33), A
-	LD	A, $2A
+	LD	A, '*'
 	CALL	write_char
 	LD	HL, 1000
 	CALL	msleep
@@ -183,7 +183,7 @@ write_string_ret_2:
 	XOR	A
 	OUT	($39), A
 	OUT	($39), A
-	LD	A, $2A
+	LD	A, '*'
 	CALL	write_char
 	LD	HL, 1000
 	CALL	msleep
@@ -192,7 +192,7 @@ write_string_ret_2:
 	XOR	A
 	OUT	($3E), A
 	OUT	($3F), A
-	LD	A, $2A
+	LD	A, '*'
 	CALL	write_char
 	LD	HL, 1000
 	CALL	msleep
@@ -220,7 +220,7 @@ write_string_ret_2:
 	OUT	($38), A
 	LD	A, $30
 	OUT	($38), A
-	LD	A, $2A
+	LD	A, '*'
 	CALL	write_char
 	LD	HL, 1000
 	CALL	msleep
@@ -234,7 +234,7 @@ write_string_ret_2:
 	OUT	($38), A
 	XOR	A
 	OUT	($38), A
-	LD	A, $2A
+	LD	A, '*'
 	CALL	write_char
 	LD	HL, 1000
 	CALL	msleep
@@ -245,12 +245,12 @@ write_string_ret_2:
 	XOR	A
 	OUT	($3D), A
 	OUT	($3C), A
-	LD	A, $2A
+	LD	A, '*'
 	CALL	write_char
 	LD	HL, 1000
 	CALL	msleep
 
-; Test block 8
+; Test block 8 ; THIS FAILS - BAD MEMORY?
 	LD	A, $1A
 	OUT	($39), A
 	LD	A, $FF
@@ -263,7 +263,7 @@ write_string_ret_2:
 	OUT	($35), A
 	LD	A, $BB
 	OUT	($39), A
-	LD	A, $2A
+	LD	A, '*'
 	CALL	write_char
 	LD	HL, 1000
 	CALL	msleep
@@ -283,10 +283,12 @@ test_wait_39_ready_2:
 	IN	A, ($39)
 	AND	$20
 	JR	Z, test_wait_39_ready_2
-	LD	A, $2A
+	LD	A, '*'
 	CALL	write_char
 	LD	HL, 1000
 	CALL	msleep
+
+; More tests go here.
 
 	LD	A, '#'
 	CALL	write_char
