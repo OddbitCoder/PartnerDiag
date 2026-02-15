@@ -150,6 +150,19 @@ write_string_ret_2:
 
 	HALT
 
+; Sleep HL milliseconds
+msleep:
+msl_loop:
+    LD      B, 233
+msl_inner_loop:
+    NOP
+    DJNZ    msl_inner_loop
+    DEC     HL
+    LD      A, H
+    OR      L
+    JR      NZ, msl_loop
+    RET
+
 ; Write character in A.
 write_char:
 	LD	HL, write_char_ret
