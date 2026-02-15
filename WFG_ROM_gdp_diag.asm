@@ -146,7 +146,147 @@ line_break_ret_2:
 	JP	write_string
 write_string_ret_2:
 
-; GDP diagnostics steps go here.
+; GDP diagnostics steps.
+; Test block 1
+	LD	A, $07
+	OUT	($33), A
+	LD	A, $07
+	OUT	($31), A
+	LD	A, $B0
+	OUT	($31), A
+	LD	A, $B2
+	OUT	($33), A
+	LD	A, $07
+	OUT	($31), A
+	LD	A, $0F
+	OUT	($31), A
+	LD	A, $2A
+	CALL	write_char
+	LD	HL, 1000
+	CALL	msleep
+
+; Test block 2
+	LD	A, $07
+	OUT	($33), A
+	LD	A, $0F
+	OUT	($33), A
+	LD	A, $07
+	OUT	($33), A
+	LD	A, $2A
+	CALL	write_char
+	LD	HL, 1000
+	CALL	msleep
+
+; Test block 3
+	LD	A, $65
+	OUT	($32), A
+	XOR	A
+	OUT	($39), A
+	OUT	($39), A
+	LD	A, $2A
+	CALL	write_char
+	LD	HL, 1000
+	CALL	msleep
+
+; Test block 4
+	XOR	A
+	OUT	($3E), A
+	OUT	($3F), A
+	LD	A, $2A
+	CALL	write_char
+	LD	HL, 1000
+	CALL	msleep
+
+; Test block 5
+	LD	A, $10
+	OUT	($39), A
+	LD	A, $D0
+	OUT	($38), A
+	LD	A, $2F
+	OUT	($38), A
+	LD	A, $8D
+	OUT	($38), A
+	LD	A, $05
+	OUT	($38), A
+	LD	A, $99
+	OUT	($38), A
+	LD	A, $4F
+	OUT	($38), A
+	LD	A, $0A
+	OUT	($38), A
+	LD	A, $EA
+	OUT	($38), A
+	XOR	A
+	OUT	($38), A
+	LD	A, $30
+	OUT	($38), A
+	LD	A, $2A
+	CALL	write_char
+	LD	HL, 1000
+	CALL	msleep
+
+; Test block 6
+	LD	A, $1C
+	OUT	($39), A
+	XOR	A
+	OUT	($38), A
+	LD	A, $17
+	OUT	($38), A
+	XOR	A
+	OUT	($38), A
+	LD	A, $2A
+	CALL	write_char
+	LD	HL, 1000
+	CALL	msleep
+
+; Test block 7
+	LD	A, $3D
+	OUT	($39), A
+	XOR	A
+	OUT	($3D), A
+	OUT	($3C), A
+	LD	A, $2A
+	CALL	write_char
+	LD	HL, 1000
+	CALL	msleep
+
+; Test block 8
+	LD	A, $1A
+	OUT	($39), A
+	LD	A, $FF
+	OUT	($38), A
+	LD	A, $0F
+	OUT	($38), A
+	LD	A, $20
+	OUT	($34), A
+	XOR	A
+	OUT	($35), A
+	LD	A, $BB
+	OUT	($39), A
+	LD	A, $2A
+	CALL	write_char
+	LD	HL, 1000
+	CALL	msleep
+
+; Test block 9 (explicit code from trace)
+test_wait_39_ready_1:
+	IN	A, ($39)
+	AND	$20
+	JR	Z, test_wait_39_ready_1
+test_wait_36_access:
+	EI
+	IN	A, ($36)
+	DI
+	AND	$10
+	JR	NZ, test_wait_36_access
+test_wait_39_ready_2:
+	IN	A, ($39)
+	AND	$20
+	JR	Z, test_wait_39_ready_2
+	LD	A, $2A
+	CALL	write_char
+	LD	HL, 1000
+	CALL	msleep
 
 	HALT
 
