@@ -1,0 +1,257 @@
+1.  Thomson GDP ports
+
+Hex. naslov
+
+20    read : status                          write : command
+---------------------------------------------------------------------------
+7 6 5 4 3 2 1 0                               glej tabelo !
+d d d d d d d +--  light pen end
+d d d d d d +----  vertical blanking
+d d d d d +-----  ready
+d d d d +------  pen out of display
+d d d +-------  light pen irq
+d d +--------  vb irq
+d +---------  ready irq
++----------  IRQ
+
+
+21    r/w    control register 1
+---------------------------------------------------------------------------
+7 6 5 4 3 2 1 0
+d d d d d d d +---  HIGH = pen down ; LOW = pen up
+d d d d d d +-----  HIGH = pen ; LOW = eraser
+d d d d d +--------  HIGH = write only
+d d d d +----------  HIGH = cyclic screen (write if pen out)
+d d d +------------  enable lpen irq
+d d +-------------  enable vb irq
+d +--------------  enable ready irq
++---------------  not used, read as 0
+
+
+22    r/w    control register 2
+---------------------------------------------------------------------------
+7 6 5 4 3 2 1 0
+d d d d d d d +---  vector type
+d d d d d d +-----  vector type
+d d d d d +--------  HIGH = tilted characters
+d d d d +----------  HIGH = characters on vert. axis
+d d d +------------  X
+d d +-------------  X
+d +--------------  X
++---------------  X
+
+23    r/w    character size register
+---------------------------------------------------------------------------
+7 6 5 4 3 2 1 0
+d d d d d d d +---  P0
+d d d d d d +-----  P1
+d d d d d +------  P2
+d d d d +-------  P3  ( scaling on x axis )
+d d d +--------  Q0
+d d +---------  Q1
+d +----------  Q2
++-----------  Q3  ( scaling on y axis )
+
+
+24              reserved
+
+25    r/w        deltax
+
+26              reserved
+
+27    r/w        deltay
+
+28    r/w        xpos MSBs
+
+29    r/w        xpos LSBs
+
+2A    r/w        ypos MSBs
+
+2B    r/w        ypos LSBs
+
+2C    read       XLP                         write  reserved
+
+2D    read       YLP                         write  reserved
+
+2E              reserved
+
+2F    read       status ( no interrupt reset )   write  reserved
+
+2.  Z80 pio ports
+
+30    r/w    graphic common control
+---------------------------------------------------------------------------
+7 6 5 4 3 2 1 0
+d d d d d d d +---  display page of memory
+d d d d d d +-----  write page of memory
+d d d d d +------  write mode ( xor / nor )
+d d d d +-------  format 0
+d d d +--------  format 1
+d d +---------  gdpint ( read only )
+d +----------  avdint ( read only )
++-----------  scroll mode
+
+31         write : pio port a control register
+
+32    r/w  common text attributes
+---------------------------------------------------------------------------
+7 6 5 4 3 2 1 0
+d d d d d d d +---  dot stretch
+d d d d d d +-----  cursor mode
+d d d d d +------  monochrome / colour
+d d d d +-------  force background / blue foreground
+d d d +--------  reverse screen / green foreground
+d d +---------  dots / char 0
+d +----------  dots / char 1
++-----------  24 / 16 Mhz text video clock
+
+
+33         write : pio port b control register
+
+3.  miscellaneous text registers
+
+34    r/w : character register
+
+35    r/w : attribute register
+---------------------------------------------------------------------------
+7 6 5 4 3 2 1 0
+d d d d d d d +---  blink
+d d d d d d +-----  underline
+d d d d d +------  special character
+d d d d +-------  protect
+d d d +--------  highlight / red foreground
+d d +---------  reverse video / green background
+d +----------  general purpose 2 / blue background
++-----------  general purpose 1 / red background
+
+
+36    write : graphic scroll   read : common input
+---------------------------------------------------------------------------
+graphic   processor scan
+lines are offset by the
+value of this 8 bit re-
+gister.
+
+7 6 5 4 3 2 1 0
+d d d d d d d +---  undefined
+d d d d d d +-----  undefined
+d d d d d +------  undefined
+d d d d +-------  undefined
+d d d +--------  avdc access flag
+d d +---------  undefined
+d +----------  undefined
++-----------  graph. pix input
+
+
+4.  text video controller ( AVDC ) ports
+
+38    write : init registers            read : interrupt register
+---------------------------------------------------------------------------
+all   15   initialization
+registers are sequentially
+accessed  via  a   single
+address
+
+7 6 5 4 3 2 1 0
+d d d d d d d +---  split screen 2
+d d d d d d +-----  ready
+d d d d d +------  split screen 1
+d d d d +-------  line zero
+d d d +--------  vertical blank
+d d +---------  reserved
+d +----------  reserved
++-----------  reserved
+
+
+39    write : command register          read : status register
+---------------------------------------------------------------------------
+refer to AVDC manual
+
+7 6 5 4 3 2 1 0
+d d d d d d d +---  split scr 2 int
+d d d d d d +-----  ready int.
+d d d d d +------  split scr 1 int
+d d d d +-------  line zero int
+d d d +--------  vb int.
+d d +---------  ready flag
+d +----------  reserved
++-----------  reserved
+
+
+3A    r/w   screen start 1 lower register
+3B    r/w   screen start 1 upper register
+3C    r/w   cursor address lower register
+3D    r/w   cursor address upper register
+3E    r/w   screen start 2 lower register
+3F    r/w   screen start 2 upper register
+
+
+AVDC COMMANDS
+-------------
+
+Bit columns: D7 D6 D5 D4 D3 D2 D1 D0
+
+Legend:
+- V = 4-bit value field (used in D3..D0), V = 0 to 14
+- N = mask/select bit (meaning depends on command)
+- d = “don’t care” / ignored by decoder
+- 0¹ / 1² = bit value shown in the original table with footnote markers (definitions not included in the snippet)
+
+INSTANTANEOUS COMMANDS
+
+1) Master reset
+   D7..D0 = 0 0 0 0 0 0 0 0
+
+2) Load IR pointer with value V (V = 0..14)
+   D7..D0 = 0 0 0 1 V V V V
+
+3) Disable graphics
+   D7..D0 = 0 0 1 d d d 1 0¹
+
+4) Enable graphics
+   D7..D0 = 0 0 1 d d d 1 1²
+
+5) Display off; float DADD bus if N = 1
+   D7..D0 = 0 0 1 d 1 N d 0¹
+
+6) Display on; select update timing:
+      - Next field if N = 1
+      - Scan line if N = 0
+   D7..D0 = 0 0 1 d 1 N d 1²
+
+7) Cursor off
+   D7..D0 = 0 0 1 1 d d d 0¹
+
+8) Cursor on
+   D7..D0 = 0 0 1 1 d d d 1²
+
+9) Reset interrupt/status bits (bit reset wherever N = 1)
+   D7..D0 = 0 1 0 N N N N N
+
+10) Disable interrupts (disable wherever N = 1)
+    D7..D0 = 1 0 0 N N N N N
+
+11) Enable interrupts (enable wherever N = 1)
+    D7..D0 = 0 1 1 N N N N N
+
+
+INTERRUPT BIT ASSIGNMENTS (for the five N bits, left→right)
+Assuming N bits correspond to D4..D0 in order:
+- D4: VB
+- D3: LZ
+- D2: SP1
+- D1: RDY
+- D0: SP2
+
+
+DELAYED COMMANDS (with Hex opcode shown)
+
+A4  (1 0 1 0 0 1 0 0)  Read at pointer address
+A2  (1 0 1 0 0 0 1 0)  Write at pointer address
+A9  (1 0 1 0 1 0 0 1)  Increment cursor address
+AC  (1 0 1 0 1 1 0 0)  Read at cursor address
+AA  (1 0 1 0 1 0 1 0)  Write at cursor address
+AD  (1 0 1 0 1 1 0 1)  Read at cursor address and increment address
+AB  (1 0 1 0 1 0 1 1)  Write at cursor address and increment address
+BB  (1 0 1 1 1 0 1 1)  Write from cursor address to pointer address
+BD  (1 0 1 1 1 1 0 1)  Read from cursor address to pointer address

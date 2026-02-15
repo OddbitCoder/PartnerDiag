@@ -1,0 +1,413 @@
+; MEMORY TEST RUNS
+
+; THEN WE "LEAVE" EPROM 
+
+>>> 8606	OUT	(#33),A
+*** OUT 33 (PIO port B control register) = 7    ; PIO B control byte 07
+>>> 8608	OUT	(#31),A
+*** OUT 31 (PIO port A control register) = 7    ; PIO A control byte 07
+>>> 861A	OUT	(#31),A
+*** OUT 31 (PIO port A control register) = B0    ; PIO A control byte B0
+>>> 8620	OUT	(#33),A
+*** OUT 33 (PIO port B control register) = B2    ; PIO B control byte B2
+*** OUT 31 (PIO port A control register) = 7    ; PIO A control byte 07
+*** OUT 31 (PIO port A control register) = F    ; PIO A control byte 0F
+
+*** OUT 30 (Graphic common control) = 0    ; display_page_memory=0, write_page_memory=0, write_mode_xor_nor=0, format_0=0, format_1=0, gdpint_read_only=0, avdint_read_only=0, scroll_mode=0
+>>> AD46	OUT	(#30),A
+*** OUT 30 (Graphic common control) = 0    ; display_page_memory=0, write_page_memory=0, write_mode_xor_nor=0, format_0=0, format_1=0, gdpint_read_only=0, avdint_read_only=0, scroll_mode=0
+>>> AD48	OUT	(#36),A
+*** OUT 36 (Common input/Graphic scroll) = 0    ; graphic scroll offset=00
+*** IN 30 (Graphic common control) = 0    ; display_page_memory=0, write_page_memory=0, write_mode_xor_nor=0, format_0=0, format_1=0, gdpint_read_only=0, avdint_read_only=0, scroll_mode=0
+>>> AD5B	OUT	(#30),A
+*** OUT 30 (Graphic common control) = 0    ; display_page_memory=0, write_page_memory=0, write_mode_xor_nor=0, format_0=0, format_1=0, gdpint_read_only=0, avdint_read_only=0, scroll_mode=0
+*** IN 30 (Graphic common control) = 0    ; display_page_memory=0, write_page_memory=0, write_mode_xor_nor=0, format_0=0, format_1=0, gdpint_read_only=0, avdint_read_only=0, scroll_mode=0
+>>> B522	OUT	(#30),A
+*** OUT 30 (Graphic common control) = 3    ; display_page_memory=1, write_page_memory=1, write_mode_xor_nor=0, format_0=0, format_1=0, gdpint_read_only=0, avdint_read_only=0, scroll_mode=0
+*** IN 30 (Graphic common control) = 3    ; display_page_memory=1, write_page_memory=1, write_mode_xor_nor=0, format_0=0, format_1=0, gdpint_read_only=0, avdint_read_only=0, scroll_mode=0
+>>> B522	OUT	(#30),A
+*** OUT 30 (Graphic common control) = 0    ; display_page_memory=0, write_page_memory=0, write_mode_xor_nor=0, format_0=0, format_1=0, gdpint_read_only=0, avdint_read_only=0, scroll_mode=0
+*** OUT 33 (PIO port B control register) = 7    ; PIO B control byte 07
+*** OUT 33 (PIO port B control register) = F    ; PIO B control byte 0F
+*** OUT 33 (PIO port B control register) = 7    ; PIO B control byte 07
+>>> A3AF	OUT	(#32),A
+*** OUT 32 (Common text attributes) = 65    ; dot_stretch=1, cursor_mode=0, monochrome_colour=1, force_background_blue_foreground=0, reverse_screen_green_foreground=0, dots_char_0=1, dots_char_1=1, text_video_clock_24_16=0
+>>> A3BE	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = 0    ; instantaneous: master reset
+>>> A3C4	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = 0    ; instantaneous: master reset
+>>> AAD7	OUT	(#3E),A
+*** OUT 3E (AVDC screen start 2 lower) = 0    ; screen_start_2_low=00
+>>> AAD9	OUT	(#3F),A
+*** OUT 3F (AVDC screen start 2 upper) = 0    ; screen_start_2_high=00
+>>> AADD	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = 10    ; instantaneous: load IR pointer with V=0
+*** OUT 38 (AVDC interrupt register/init registers) = D0    ; AVDC init/register data byte D0
+*** OUT 38 (AVDC interrupt register/init registers) = 2F    ; AVDC init/register data byte 2F
+*** OUT 38 (AVDC interrupt register/init registers) = 8D    ; AVDC init/register data byte 8D
+*** OUT 38 (AVDC interrupt register/init registers) = 5    ; AVDC init/register data byte 05
+*** OUT 38 (AVDC interrupt register/init registers) = 99    ; AVDC init/register data byte 99
+*** OUT 38 (AVDC interrupt register/init registers) = 4F    ; AVDC init/register data byte 4F
+*** OUT 38 (AVDC interrupt register/init registers) = A    ; AVDC init/register data byte 0A
+*** OUT 38 (AVDC interrupt register/init registers) = EA    ; AVDC init/register data byte EA
+*** OUT 38 (AVDC interrupt register/init registers) = 0    ; AVDC init/register data byte 00
+*** OUT 38 (AVDC interrupt register/init registers) = 30    ; AVDC init/register data byte 30
+>>> AAA9	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = 1C    ; instantaneous: load IR pointer with V=12
+*** OUT 38 (AVDC interrupt register/init registers) = 0    ; AVDC init/register data byte 00
+*** OUT 38 (AVDC interrupt register/init registers) = 17    ; AVDC init/register data byte 17
+*** OUT 38 (AVDC interrupt register/init registers) = 0    ; AVDC init/register data byte 00
+>>> A3D3	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = 3D    ; instantaneous: cursor on
+>>> A3D6	OUT	(#3D),A
+*** OUT 3D (AVDC cursor address upper) = 0    ; cursor_addr_high=00
+>>> A3D8	OUT	(#3C),A
+*** OUT 3C (AVDC cursor address lower) = 0    ; cursor_addr_low=00
+>>> AA81	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = 1A    ; instantaneous: load IR pointer with V=10
+>>> AA84	OUT	(#38),A
+*** OUT 38 (AVDC interrupt register/init registers) = FF    ; AVDC init/register data byte FF
+>>> AA87	OUT	(#38),A
+*** OUT 38 (AVDC interrupt register/init registers) = F    ; AVDC init/register data byte 0F
+>>> A3E2	OUT	(#34),A
+*** OUT 34 (Character register) = 20    ; character ' '
+>>> A3E5	OUT	(#35),A
+*** OUT 35 (Attribute register) = 0    ; blink=0, underline=0, special_character=0, protect=0, highlight_red_foreground=0, reverse_video_green_background=0, gp2_blue_background=0, gp1_red_background=0
+>>> A3E9	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = BB    ; delayed: write from cursor address to pointer address
+*** IN 39 (AVDC status/command) = 20    ; split_scr2_int=0, ready_int=0, split_scr1_int=0, line_zero_int=0, vb_int=0, ready_flag=1, bit6_reserved=0, bit7_reserved=0
+*** IN 36 (Common input/Graphic scroll) = 5F    ; bit0_undefined=1, bit1_undefined=1, bit2_undefined=1, bit3_undefined=1, avdc_access_flag=1, bit5_undefined=0, bit6_undefined=1, graph_pix_input=0
+*** IN 36 (Common input/Graphic scroll) = 5E    ; bit0_undefined=0, bit1_undefined=1, bit2_undefined=1, bit3_undefined=1, avdc_access_flag=1, bit5_undefined=0, bit6_undefined=1, graph_pix_input=0
+*** IN 36 (Common input/Graphic scroll) = 4E    ; bit0_undefined=0, bit1_undefined=1, bit2_undefined=1, bit3_undefined=1, avdc_access_flag=0, bit5_undefined=0, bit6_undefined=1, graph_pix_input=0
+*** IN 39 (AVDC status/command) = 20    ; split_scr2_int=0, ready_int=0, split_scr1_int=0, line_zero_int=0, vb_int=0, ready_flag=1, bit6_reserved=0, bit7_reserved=0
+>>> AA8F	OUT	(#3C),A
+*** OUT 3C (AVDC cursor address lower) = 0    ; cursor_addr_low=00
+>>> AA92	OUT	(#3D),A
+*** OUT 3D (AVDC cursor address upper) = 0    ; cursor_addr_high=00
+*** IN 36 (Common input/Graphic scroll) = 5E    ; bit0_undefined=0, bit1_undefined=1, bit2_undefined=1, bit3_undefined=1, avdc_access_flag=1, bit5_undefined=0, bit6_undefined=1, graph_pix_input=0
+*** IN 36 (Common input/Graphic scroll) = 4F    ; bit0_undefined=1, bit1_undefined=1, bit2_undefined=1, bit3_undefined=1, avdc_access_flag=0, bit5_undefined=0, bit6_undefined=1, graph_pix_input=0
+*** IN 39 (AVDC status/command) = 20    ; split_scr2_int=0, ready_int=0, split_scr1_int=0, line_zero_int=0, vb_int=0, ready_flag=1, bit6_reserved=0, bit7_reserved=0
+*** OUT 34 (Character register) = C2    ; character code C2
+>>> AB0E	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB    ; delayed: write at cursor address and increment
+*** IN 39 (AVDC status/command) = 20    ; split_scr2_int=0, ready_int=0, split_scr1_int=0, line_zero_int=0, vb_int=0, ready_flag=1, bit6_reserved=0, bit7_reserved=0
+*** OUT 34 (Character register) = 1    ; character code 01
+>>> AB17	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB    ; delayed: write at cursor address and increment
+*** IN 39 (AVDC status/command) = 20    ; split_scr2_int=0, ready_int=0, split_scr1_int=0, line_zero_int=0, vb_int=0, ready_flag=1, bit6_reserved=0, bit7_reserved=0
+*** OUT 34 (Character register) = 46    ; character 'F'
+>>> AB0E	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB    ; delayed: write at cursor address and increment
+*** IN 39 (AVDC status/command) = 20    ; split_scr2_int=0, ready_int=0, split_scr1_int=0, line_zero_int=0, vb_int=0, ready_flag=1, bit6_reserved=0, bit7_reserved=0
+*** OUT 34 (Character register) = 2    ; character code 02
+>>> AB17	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB    ; delayed: write at cursor address and increment
+*** IN 39 (AVDC status/command) = 20    ; split_scr2_int=0, ready_int=0, split_scr1_int=0, line_zero_int=0, vb_int=0, ready_flag=1, bit6_reserved=0, bit7_reserved=0
+*** OUT 34 (Character register) = CA    ; character code CA
+>>> AB0E	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB    ; delayed: write at cursor address and increment
+*** IN 39 (AVDC status/command) = 20    ; split_scr2_int=0, ready_int=0, split_scr1_int=0, line_zero_int=0, vb_int=0, ready_flag=1, bit6_reserved=0, bit7_reserved=0
+*** OUT 34 (Character register) = 2    ; character code 02
+>>> AB17	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB    ; delayed: write at cursor address and increment
+*** IN 36 (Common input/Graphic scroll) = 4E    ; bit0_undefined=0, bit1_undefined=1, bit2_undefined=1, bit3_undefined=1, avdc_access_flag=0, bit5_undefined=0, bit6_undefined=1, graph_pix_input=0
+*** IN 36 (Common input/Graphic scroll) = 4F    ; bit0_undefined=1, bit1_undefined=1, bit2_undefined=1, bit3_undefined=1, avdc_access_flag=0, bit5_undefined=0, bit6_undefined=1, graph_pix_input=0
+*** IN 36 (Common input/Graphic scroll) = 4E    ; bit0_undefined=0, bit1_undefined=1, bit2_undefined=1, bit3_undefined=1, avdc_access_flag=0, bit5_undefined=0, bit6_undefined=1, graph_pix_input=0
+*** IN 36 (Common input/Graphic scroll) = 5E    ; bit0_undefined=0, bit1_undefined=1, bit2_undefined=1, bit3_undefined=1, avdc_access_flag=1, bit5_undefined=0, bit6_undefined=1, graph_pix_input=0
+*** IN 36 (Common input/Graphic scroll) = 4E    ; bit0_undefined=0, bit1_undefined=1, bit2_undefined=1, bit3_undefined=1, avdc_access_flag=0, bit5_undefined=0, bit6_undefined=1, graph_pix_input=0
+*** IN 39 (AVDC status/command) = 20    ; split_scr2_int=0, ready_int=0, split_scr1_int=0, line_zero_int=0, vb_int=0, ready_flag=1, bit6_reserved=0, bit7_reserved=0
+*** OUT 34 (Character register) = 4E    ; character 'N'
+>>> AB0E	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB    ; delayed: write at cursor address and increment
+*** IN 39 (AVDC status/command) = 20    ; split_scr2_int=0, ready_int=0, split_scr1_int=0, line_zero_int=0, vb_int=0, ready_flag=1, bit6_reserved=0, bit7_reserved=0
+*** OUT 34 (Character register) = 3    ; character code 03
+>>> AB17	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB    ; delayed: write at cursor address and increment
+*** IN 39 (AVDC status/command) = 20    ; split_scr2_int=0, ready_int=0, split_scr1_int=0, line_zero_int=0, vb_int=0, ready_flag=1, bit6_reserved=0, bit7_reserved=0
+*** OUT 34 (Character register) = D2    ; character code D2
+>>> AB0E	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB    ; delayed: write at cursor address and increment
+*** IN 39 (AVDC status/command) = 20    ; split_scr2_int=0, ready_int=0, split_scr1_int=0, line_zero_int=0, vb_int=0, ready_flag=1, bit6_reserved=0, bit7_reserved=0
+*** OUT 34 (Character register) = 3    ; character code 03
+>>> AB17	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB    ; delayed: write at cursor address and increment
+*** IN 39 (AVDC status/command) = 20    ; split_scr2_int=0, ready_int=0, split_scr1_int=0, line_zero_int=0, vb_int=0, ready_flag=1, bit6_reserved=0, bit7_reserved=0
+*** OUT 34 (Character register) = 56    ; character 'V'
+>>> AB0E	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB    ; delayed: write at cursor address and increment
+*** IN 39 (AVDC status/command) = 20    ; split_scr2_int=0, ready_int=0, split_scr1_int=0, line_zero_int=0, vb_int=0, ready_flag=1, bit6_reserved=0, bit7_reserved=0
+*** OUT 34 (Character register) = 4    ; character code 04
+>>> AB17	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB    ; delayed: write at cursor address and increment
+*** IN 36 (Common input/Graphic scroll) = 5E  [x3]    ; bit0_undefined=0, bit1_undefined=1, bit2_undefined=1, bit3_undefined=1, avdc_access_flag=1, bit5_undefined=0, bit6_undefined=1, graph_pix_input=0
+*** IN 36 (Common input/Graphic scroll) = 4F    ; bit0_undefined=1, bit1_undefined=1, bit2_undefined=1, bit3_undefined=1, avdc_access_flag=0, bit5_undefined=0, bit6_undefined=1, graph_pix_input=0
+*** IN 39 (AVDC status/command) = 20    ; split_scr2_int=0, ready_int=0, split_scr1_int=0, line_zero_int=0, vb_int=0, ready_flag=1, bit6_reserved=0, bit7_reserved=0
+*** OUT 34 (Character register) = DA    ; character code DA
+>>> AB0E	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB    ; delayed: write at cursor address and increment
+*** IN 39 (AVDC status/command) = 20    ; split_scr2_int=0, ready_int=0, split_scr1_int=0, line_zero_int=0, vb_int=0, ready_flag=1, bit6_reserved=0, bit7_reserved=0
+*** OUT 34 (Character register) = 4    ; character code 04
+>>> AB17	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB    ; delayed: write at cursor address and increment
+*** IN 39 (AVDC status/command) = 20    ; split_scr2_int=0, ready_int=0, split_scr1_int=0, line_zero_int=0, vb_int=0, ready_flag=1, bit6_reserved=0, bit7_reserved=0
+*** OUT 34 (Character register) = 5E    ; character '^'
+>>> AB0E	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB    ; delayed: write at cursor address and increment
+*** IN 39 (AVDC status/command) = 20    ; split_scr2_int=0, ready_int=0, split_scr1_int=0, line_zero_int=0, vb_int=0, ready_flag=1, bit6_reserved=0, bit7_reserved=0
+*** OUT 34 (Character register) = 5    ; character code 05
+>>> AB17	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB    ; delayed: write at cursor address and increment
+*** IN 39 (AVDC status/command) = 20    ; split_scr2_int=0, ready_int=0, split_scr1_int=0, line_zero_int=0, vb_int=0, ready_flag=1, bit6_reserved=0, bit7_reserved=0
+*** OUT 34 (Character register) = E2    ; character code E2
+>>> AB0E	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB    ; delayed: write at cursor address and increment
+*** IN 39 (AVDC status/command) = 20    ; split_scr2_int=0, ready_int=0, split_scr1_int=0, line_zero_int=0, vb_int=0, ready_flag=1, bit6_reserved=0, bit7_reserved=0
+*** OUT 34 (Character register) = 5    ; character code 05
+>>> AB17	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB    ; delayed: write at cursor address and increment
+*** IN 36 (Common input/Graphic scroll) = 4E    ; bit0_undefined=0, bit1_undefined=1, bit2_undefined=1, bit3_undefined=1, avdc_access_flag=0, bit5_undefined=0, bit6_undefined=1, graph_pix_input=0
+*** IN 36 (Common input/Graphic scroll) = 5F    ; bit0_undefined=1, bit1_undefined=1, bit2_undefined=1, bit3_undefined=1, avdc_access_flag=1, bit5_undefined=0, bit6_undefined=1, graph_pix_input=0
+*** IN 36 (Common input/Graphic scroll) = 4E    ; bit0_undefined=0, bit1_undefined=1, bit2_undefined=1, bit3_undefined=1, avdc_access_flag=0, bit5_undefined=0, bit6_undefined=1, graph_pix_input=0
+*** IN 39 (AVDC status/command) = 20    ; split_scr2_int=0, ready_int=0, split_scr1_int=0, line_zero_int=0, vb_int=0, ready_flag=1, bit6_reserved=0, bit7_reserved=0
+*** OUT 34 (Character register) = 66    ; character 'f'
+>>> AB0E	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB    ; delayed: write at cursor address and increment
+*** IN 39 (AVDC status/command) = 20    ; split_scr2_int=0, ready_int=0, split_scr1_int=0, line_zero_int=0, vb_int=0, ready_flag=1, bit6_reserved=0, bit7_reserved=0
+*** OUT 34 (Character register) = 6    ; character code 06
+>>> AB17	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB    ; delayed: write at cursor address and increment
+*** IN 39 (AVDC status/command) = 20    ; split_scr2_int=0, ready_int=0, split_scr1_int=0, line_zero_int=0, vb_int=0, ready_flag=1, bit6_reserved=0, bit7_reserved=0
+*** OUT 34 (Character register) = EA    ; character code EA
+>>> AB0E	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB    ; delayed: write at cursor address and increment
+*** IN 39 (AVDC status/command) = 20    ; split_scr2_int=0, ready_int=0, split_scr1_int=0, line_zero_int=0, vb_int=0, ready_flag=1, bit6_reserved=0, bit7_reserved=0
+*** OUT 34 (Character register) = 6    ; character code 06
+>>> AB17	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB    ; delayed: write at cursor address and increment
+*** IN 39 (AVDC status/command) = 20    ; split_scr2_int=0, ready_int=0, split_scr1_int=0, line_zero_int=0, vb_int=0, ready_flag=1, bit6_reserved=0, bit7_reserved=0
+*** OUT 34 (Character register) = 6E    ; character 'n'
+>>> AB0E	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB    ; delayed: write at cursor address and increment
+*** IN 39 (AVDC status/command) = 20    ; split_scr2_int=0, ready_int=0, split_scr1_int=0, line_zero_int=0, vb_int=0, ready_flag=1, bit6_reserved=0, bit7_reserved=0
+*** OUT 34 (Character register) = 7    ; character code 07
+>>> AB17	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB    ; delayed: write at cursor address and increment
+*** IN 36 (Common input/Graphic scroll) = 5F  [x2]    ; bit0_undefined=1, bit1_undefined=1, bit2_undefined=1, bit3_undefined=1, avdc_access_flag=1, bit5_undefined=0, bit6_undefined=1, graph_pix_input=0
+*** IN 36 (Common input/Graphic scroll) = 5E  [x2]    ; bit0_undefined=0, bit1_undefined=1, bit2_undefined=1, bit3_undefined=1, avdc_access_flag=1, bit5_undefined=0, bit6_undefined=1, graph_pix_input=0
+*** IN 36 (Common input/Graphic scroll) = 4E    ; bit0_undefined=0, bit1_undefined=1, bit2_undefined=1, bit3_undefined=1, avdc_access_flag=0, bit5_undefined=0, bit6_undefined=1, graph_pix_input=0
+*** IN 39 (AVDC status/command) = 20    ; split_scr2_int=0, ready_int=0, split_scr1_int=0, line_zero_int=0, vb_int=0, ready_flag=1, bit6_reserved=0, bit7_reserved=0
+*** OUT 34 (Character register) = F2    ; character code F2
+>>> AB0E	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB    ; delayed: write at cursor address and increment
+*** IN 39 (AVDC status/command) = 20    ; split_scr2_int=0, ready_int=0, split_scr1_int=0, line_zero_int=0, vb_int=0, ready_flag=1, bit6_reserved=0, bit7_reserved=0
+*** OUT 34 (Character register) = 7    ; character code 07
+>>> AB17	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB    ; delayed: write at cursor address and increment
+*** IN 39 (AVDC status/command) = 20    ; split_scr2_int=0, ready_int=0, split_scr1_int=0, line_zero_int=0, vb_int=0, ready_flag=1, bit6_reserved=0, bit7_reserved=0
+*** OUT 34 (Character register) = 76    ; character 'v'
+>>> AB0E	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB    ; delayed: write at cursor address and increment
+*** IN 39 (AVDC status/command) = 20    ; split_scr2_int=0, ready_int=0, split_scr1_int=0, line_zero_int=0, vb_int=0, ready_flag=1, bit6_reserved=0, bit7_reserved=0
+*** OUT 34 (Character register) = 8    ; character code 08
+>>> AB17	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB    ; delayed: write at cursor address and increment
+*** IN 39 (AVDC status/command) = 20    ; split_scr2_int=0, ready_int=0, split_scr1_int=0, line_zero_int=0, vb_int=0, ready_flag=1, bit6_reserved=0, bit7_reserved=0
+*** OUT 34 (Character register) = FA    ; character code FA
+>>> AB0E	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB    ; delayed: write at cursor address and increment
+*** IN 39 (AVDC status/command) = 20    ; split_scr2_int=0, ready_int=0, split_scr1_int=0, line_zero_int=0, vb_int=0, ready_flag=1, bit6_reserved=0, bit7_reserved=0
+*** OUT 34 (Character register) = 8    ; character code 08
+>>> AB17	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB    ; delayed: write at cursor address and increment
+*** IN 36 (Common input/Graphic scroll) = 5E    ; bit0_undefined=0, bit1_undefined=1, bit2_undefined=1, bit3_undefined=1, avdc_access_flag=1, bit5_undefined=0, bit6_undefined=1, graph_pix_input=0
+*** IN 36 (Common input/Graphic scroll) = 4E    ; bit0_undefined=0, bit1_undefined=1, bit2_undefined=1, bit3_undefined=1, avdc_access_flag=0, bit5_undefined=0, bit6_undefined=1, graph_pix_input=0
+*** IN 39 (AVDC status/command) = 20    ; split_scr2_int=0, ready_int=0, split_scr1_int=0, line_zero_int=0, vb_int=0, ready_flag=1, bit6_reserved=0, bit7_reserved=0
+*** OUT 34 (Character register) = 7E    ; character '~'
+>>> AB0E	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB    ; delayed: write at cursor address and increment
+*** IN 39 (AVDC status/command) = 20    ; split_scr2_int=0, ready_int=0, split_scr1_int=0, line_zero_int=0, vb_int=0, ready_flag=1, bit6_reserved=0, bit7_reserved=0
+*** OUT 34 (Character register) = 9    ; character code 09
+>>> AB17	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB    ; delayed: write at cursor address and increment
+*** IN 39 (AVDC status/command) = 20    ; split_scr2_int=0, ready_int=0, split_scr1_int=0, line_zero_int=0, vb_int=0, ready_flag=1, bit6_reserved=0, bit7_reserved=0
+*** OUT 34 (Character register) = 2    ; character code 02
+>>> AB0E	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB    ; delayed: write at cursor address and increment
+*** IN 39 (AVDC status/command) = 20    ; split_scr2_int=0, ready_int=0, split_scr1_int=0, line_zero_int=0, vb_int=0, ready_flag=1, bit6_reserved=0, bit7_reserved=0
+*** OUT 34 (Character register) = A    ; character code 0A
+>>> AB17	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB    ; delayed: write at cursor address and increment
+*** IN 39 (AVDC status/command) = 20    ; split_scr2_int=0, ready_int=0, split_scr1_int=0, line_zero_int=0, vb_int=0, ready_flag=1, bit6_reserved=0, bit7_reserved=0
+*** OUT 34 (Character register) = 86    ; character code 86
+>>> AB0E	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB    ; delayed: write at cursor address and increment
+*** IN 39 (AVDC status/command) = 20    ; split_scr2_int=0, ready_int=0, split_scr1_int=0, line_zero_int=0, vb_int=0, ready_flag=1, bit6_reserved=0, bit7_reserved=0
+*** OUT 34 (Character register) = A    ; character code 0A
+>>> AB17	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB    ; delayed: write at cursor address and increment
+*** IN 36 (Common input/Graphic scroll) = 4E    ; bit0_undefined=0, bit1_undefined=1, bit2_undefined=1, bit3_undefined=1, avdc_access_flag=0, bit5_undefined=0, bit6_undefined=1, graph_pix_input=0
+*** IN 36 (Common input/Graphic scroll) = 5F  [x2]    ; bit0_undefined=1, bit1_undefined=1, bit2_undefined=1, bit3_undefined=1, avdc_access_flag=1, bit5_undefined=0, bit6_undefined=1, graph_pix_input=0
+*** IN 36 (Common input/Graphic scroll) = 4F    ; bit0_undefined=1, bit1_undefined=1, bit2_undefined=1, bit3_undefined=1, avdc_access_flag=0, bit5_undefined=0, bit6_undefined=1, graph_pix_input=0
+*** IN 39 (AVDC status/command) = 20    ; split_scr2_int=0, ready_int=0, split_scr1_int=0, line_zero_int=0, vb_int=0, ready_flag=1, bit6_reserved=0, bit7_reserved=0
+*** OUT 34 (Character register) = A    ; character code 0A
+>>> AB0E	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB    ; delayed: write at cursor address and increment
+*** IN 39 (AVDC status/command) = 20    ; split_scr2_int=0, ready_int=0, split_scr1_int=0, line_zero_int=0, vb_int=0, ready_flag=1, bit6_reserved=0, bit7_reserved=0
+*** OUT 34 (Character register) = B    ; character code 0B
+>>> AB17	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB    ; delayed: write at cursor address and increment
+*** IN 39 (AVDC status/command) = 20    ; split_scr2_int=0, ready_int=0, split_scr1_int=0, line_zero_int=0, vb_int=0, ready_flag=1, bit6_reserved=0, bit7_reserved=0
+*** OUT 34 (Character register) = 8E    ; character code 8E
+>>> AB0E	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB    ; delayed: write at cursor address and increment
+*** IN 39 (AVDC status/command) = 20    ; split_scr2_int=0, ready_int=0, split_scr1_int=0, line_zero_int=0, vb_int=0, ready_flag=1, bit6_reserved=0, bit7_reserved=0
+*** OUT 34 (Character register) = B    ; character code 0B
+>>> AB17	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB    ; delayed: write at cursor address and increment
+*** IN 39 (AVDC status/command) = 20    ; split_scr2_int=0, ready_int=0, split_scr1_int=0, line_zero_int=0, vb_int=0, ready_flag=1, bit6_reserved=0, bit7_reserved=0
+*** OUT 34 (Character register) = 12    ; character code 12
+>>> AB0E	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB    ; delayed: write at cursor address and increment
+*** IN 39 (AVDC status/command) = 20    ; split_scr2_int=0, ready_int=0, split_scr1_int=0, line_zero_int=0, vb_int=0, ready_flag=1, bit6_reserved=0, bit7_reserved=0
+*** OUT 34 (Character register) = C    ; character code 0C
+>>> AB17	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB    ; delayed: write at cursor address and increment
+*** IN 36 (Common input/Graphic scroll) = 4F    ; bit0_undefined=1, bit1_undefined=1, bit2_undefined=1, bit3_undefined=1, avdc_access_flag=0, bit5_undefined=0, bit6_undefined=1, graph_pix_input=0
+*** IN 36 (Common input/Graphic scroll) = 4E    ; bit0_undefined=0, bit1_undefined=1, bit2_undefined=1, bit3_undefined=1, avdc_access_flag=0, bit5_undefined=0, bit6_undefined=1, graph_pix_input=0
+*** IN 36 (Common input/Graphic scroll) = 4F  [x4]    ; bit0_undefined=1, bit1_undefined=1, bit2_undefined=1, bit3_undefined=1, avdc_access_flag=0, bit5_undefined=0, bit6_undefined=1, graph_pix_input=0
+*** IN 36 (Common input/Graphic scroll) = 5F    ; bit0_undefined=1, bit1_undefined=1, bit2_undefined=1, bit3_undefined=1, avdc_access_flag=1, bit5_undefined=0, bit6_undefined=1, graph_pix_input=0
+*** IN 36 (Common input/Graphic scroll) = 4E    ; bit0_undefined=0, bit1_undefined=1, bit2_undefined=1, bit3_undefined=1, avdc_access_flag=0, bit5_undefined=0, bit6_undefined=1, graph_pix_input=0
+*** IN 39 (AVDC status/command) = 20    ; split_scr2_int=0, ready_int=0, split_scr1_int=0, line_zero_int=0, vb_int=0, ready_flag=1, bit6_reserved=0, bit7_reserved=0
+*** OUT 34 (Character register) = 96    ; character code 96
+>>> AB0E	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB    ; delayed: write at cursor address and increment
+*** IN 39 (AVDC status/command) = 20    ; split_scr2_int=0, ready_int=0, split_scr1_int=0, line_zero_int=0, vb_int=0, ready_flag=1, bit6_reserved=0, bit7_reserved=0
+*** OUT 34 (Character register) = C    ; character code 0C
+>>> AB17	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB    ; delayed: write at cursor address and increment
+*** IN 39 (AVDC status/command) = 20    ; split_scr2_int=0, ready_int=0, split_scr1_int=0, line_zero_int=0, vb_int=0, ready_flag=1, bit6_reserved=0, bit7_reserved=0
+*** OUT 34 (Character register) = 1A    ; character code 1A
+>>> AB0E	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB    ; delayed: write at cursor address and increment
+*** IN 39 (AVDC status/command) = 20    ; split_scr2_int=0, ready_int=0, split_scr1_int=0, line_zero_int=0, vb_int=0, ready_flag=1, bit6_reserved=0, bit7_reserved=0
+*** OUT 34 (Character register) = D    ; character code 0D
+>>> AB17	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB    ; delayed: write at cursor address and increment
+*** IN 39 (AVDC status/command) = 20    ; split_scr2_int=0, ready_int=0, split_scr1_int=0, line_zero_int=0, vb_int=0, ready_flag=1, bit6_reserved=0, bit7_reserved=0
+*** OUT 34 (Character register) = 9E    ; character code 9E
+>>> AB0E	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB    ; delayed: write at cursor address and increment
+*** IN 39 (AVDC status/command) = 20    ; split_scr2_int=0, ready_int=0, split_scr1_int=0, line_zero_int=0, vb_int=0, ready_flag=1, bit6_reserved=0, bit7_reserved=0
+*** OUT 34 (Character register) = D    ; character code 0D
+>>> AB17	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB    ; delayed: write at cursor address and increment
+*** IN 36 (Common input/Graphic scroll) = 4E  [x3]    ; bit0_undefined=0, bit1_undefined=1, bit2_undefined=1, bit3_undefined=1, avdc_access_flag=0, bit5_undefined=0, bit6_undefined=1, graph_pix_input=0
+*** IN 36 (Common input/Graphic scroll) = 4F    ; bit0_undefined=1, bit1_undefined=1, bit2_undefined=1, bit3_undefined=1, avdc_access_flag=0, bit5_undefined=0, bit6_undefined=1, graph_pix_input=0
+*** IN 36 (Common input/Graphic scroll) = 5E    ; bit0_undefined=0, bit1_undefined=1, bit2_undefined=1, bit3_undefined=1, avdc_access_flag=1, bit5_undefined=0, bit6_undefined=1, graph_pix_input=0
+*** IN 36 (Common input/Graphic scroll) = 4E    ; bit0_undefined=0, bit1_undefined=1, bit2_undefined=1, bit3_undefined=1, avdc_access_flag=0, bit5_undefined=0, bit6_undefined=1, graph_pix_input=0
+*** IN 39 (AVDC status/command) = 20    ; split_scr2_int=0, ready_int=0, split_scr1_int=0, line_zero_int=0, vb_int=0, ready_flag=1, bit6_reserved=0, bit7_reserved=0
+*** OUT 34 (Character register) = 22    ; character '"'
+>>> AB0E	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB    ; delayed: write at cursor address and increment
+*** IN 39 (AVDC status/command) = 20    ; split_scr2_int=0, ready_int=0, split_scr1_int=0, line_zero_int=0, vb_int=0, ready_flag=1, bit6_reserved=0, bit7_reserved=0
+*** OUT 34 (Character register) = E    ; character code 0E
+>>> AB17	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB    ; delayed: write at cursor address and increment
+*** IN 39 (AVDC status/command) = 20    ; split_scr2_int=0, ready_int=0, split_scr1_int=0, line_zero_int=0, vb_int=0, ready_flag=1, bit6_reserved=0, bit7_reserved=0
+*** OUT 34 (Character register) = A6    ; character code A6
+>>> AB0E	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB    ; delayed: write at cursor address and increment
+*** IN 39 (AVDC status/command) = 20    ; split_scr2_int=0, ready_int=0, split_scr1_int=0, line_zero_int=0, vb_int=0, ready_flag=1, bit6_reserved=0, bit7_reserved=0
+*** OUT 34 (Character register) = E    ; character code 0E
+>>> AB17	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB    ; delayed: write at cursor address and increment
+*** IN 39 (AVDC status/command) = 20    ; split_scr2_int=0, ready_int=0, split_scr1_int=0, line_zero_int=0, vb_int=0, ready_flag=1, bit6_reserved=0, bit7_reserved=0
+*** OUT 34 (Character register) = 2A    ; character '*'
+>>> AB0E	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB    ; delayed: write at cursor address and increment
+*** IN 39 (AVDC status/command) = 20    ; split_scr2_int=0, ready_int=0, split_scr1_int=0, line_zero_int=0, vb_int=0, ready_flag=1, bit6_reserved=0, bit7_reserved=0
+*** OUT 34 (Character register) = F    ; character code 0F
+>>> AB17	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB    ; delayed: write at cursor address and increment
+>>> A3F9	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = 35    ; instantaneous: cursor on
+*** IN 36 (Common input/Graphic scroll) = 4F    ; bit0_undefined=1, bit1_undefined=1, bit2_undefined=1, bit3_undefined=1, avdc_access_flag=0, bit5_undefined=0, bit6_undefined=1, graph_pix_input=0
+>>> AB82	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = 30    ; instantaneous: cursor off
+*** IN 36 (Common input/Graphic scroll) = 5F    ; bit0_undefined=1, bit1_undefined=1, bit2_undefined=1, bit3_undefined=1, avdc_access_flag=1, bit5_undefined=0, bit6_undefined=1, graph_pix_input=0
+*** IN 36 (Common input/Graphic scroll) = 4E    ; bit0_undefined=0, bit1_undefined=1, bit2_undefined=1, bit3_undefined=1, avdc_access_flag=0, bit5_undefined=0, bit6_undefined=1, graph_pix_input=0
+*** IN 39 (AVDC status/command) = 20    ; split_scr2_int=0, ready_int=0, split_scr1_int=0, line_zero_int=0, vb_int=0, ready_flag=1, bit6_reserved=0, bit7_reserved=0
+>>> AA8F	OUT	(#3C),A
+*** OUT 3C (AVDC cursor address lower) = C2    ; cursor_addr_low=C2
+>>> AA92	OUT	(#3D),A
+*** OUT 3D (AVDC cursor address upper) = 1    ; cursor_addr_high=01
+*** IN 36 (Common input/Graphic scroll) = 5E    ; bit0_undefined=0, bit1_undefined=1, bit2_undefined=1, bit3_undefined=1, avdc_access_flag=1, bit5_undefined=0, bit6_undefined=1, graph_pix_input=0
+*** IN 36 (Common input/Graphic scroll) = 4F    ; bit0_undefined=1, bit1_undefined=1, bit2_undefined=1, bit3_undefined=1, avdc_access_flag=0, bit5_undefined=0, bit6_undefined=1, graph_pix_input=0
+>>> AB8D	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = 35    ; instantaneous: cursor on
+*** IN 32 (Common text attributes) = 65    ; dot_stretch=1, cursor_mode=0, monochrome_colour=1, force_background_blue_foreground=0, reverse_screen_green_foreground=0, dots_char_0=1, dots_char_1=1, text_video_clock_24_16=0
+>>> AA06	OUT	(#32),A
+*** OUT 32 (Common text attributes) = 65    ; dot_stretch=1, cursor_mode=0, monochrome_colour=1, force_background_blue_foreground=0, reverse_screen_green_foreground=0, dots_char_0=1, dots_char_1=1, text_video_clock_24_16=0
+*** IN 36 (Common input/Graphic scroll) = 4F    ; bit0_undefined=1, bit1_undefined=1, bit2_undefined=1, bit3_undefined=1, avdc_access_flag=0, bit5_undefined=0, bit6_undefined=1, graph_pix_input=0
+*** IN 39 (AVDC status/command) = 20    ; split_scr2_int=0, ready_int=0, split_scr1_int=0, line_zero_int=0, vb_int=0, ready_flag=1, bit6_reserved=0, bit7_reserved=0
+>>> A9BE	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = 0    ; instantaneous: master reset
+*** IN 36 (Common input/Graphic scroll) = 5F    ; bit0_undefined=1, bit1_undefined=1, bit2_undefined=1, bit3_undefined=1, avdc_access_flag=1, bit5_undefined=0, bit6_undefined=1, graph_pix_input=0
+*** IN 36 (Common input/Graphic scroll) = 4E    ; bit0_undefined=0, bit1_undefined=1, bit2_undefined=1, bit3_undefined=1, avdc_access_flag=0, bit5_undefined=0, bit6_undefined=1, graph_pix_input=0
+*** IN 39 (AVDC status/command) = 20    ; split_scr2_int=0, ready_int=0, split_scr1_int=0, line_zero_int=0, vb_int=0, ready_flag=1, bit6_reserved=0, bit7_reserved=0
+>>> A9D7	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = 0    ; instantaneous: master reset
+*** IN 32 (Common text attributes) = 65    ; dot_stretch=1, cursor_mode=0, monochrome_colour=1, force_background_blue_foreground=0, reverse_screen_green_foreground=0, dots_char_0=1, dots_char_1=1, text_video_clock_24_16=0
+>>> A9E2	OUT	(#32),A
+*** OUT 32 (Common text attributes) = 65    ; dot_stretch=1, cursor_mode=0, monochrome_colour=1, force_background_blue_foreground=0, reverse_screen_green_foreground=0, dots_char_0=1, dots_char_1=1, text_video_clock_24_16=0
+>>> AAD7	OUT	(#3E),A
+*** OUT 3E (AVDC screen start 2 lower) = 0    ; screen_start_2_low=00
+>>> AAD9	OUT	(#3F),A
+*** OUT 3F (AVDC screen start 2 upper) = 0    ; screen_start_2_high=00
+>>> AADD	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = 10    ; instantaneous: load IR pointer with V=0
+*** OUT 38 (AVDC interrupt register/init registers) = D0    ; AVDC init/register data byte D0
+*** OUT 38 (AVDC interrupt register/init registers) = 2F    ; AVDC init/register data byte 2F
+*** OUT 38 (AVDC interrupt register/init registers) = 8D    ; AVDC init/register data byte 8D
+*** OUT 38 (AVDC interrupt register/init registers) = 5    ; AVDC init/register data byte 05
+*** OUT 38 (AVDC interrupt register/init registers) = 99    ; AVDC init/register data byte 99
+*** OUT 38 (AVDC interrupt register/init registers) = 4F    ; AVDC init/register data byte 4F
+*** OUT 38 (AVDC interrupt register/init registers) = A    ; AVDC init/register data byte 0A
+*** OUT 38 (AVDC interrupt register/init registers) = EA    ; AVDC init/register data byte EA
+*** OUT 38 (AVDC interrupt register/init registers) = 0    ; AVDC init/register data byte 00
+*** OUT 38 (AVDC interrupt register/init registers) = 30    ; AVDC init/register data byte 30
+>>> A9E8	OUT	(#3E),A
+*** OUT 3E (AVDC screen start 2 lower) = 0    ; screen_start_2_low=00
+>>> A9EA	OUT	(#3F),A
+*** OUT 3F (AVDC screen start 2 upper) = 0    ; screen_start_2_high=00
+>>> A9F1	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = 3D    ; instantaneous: cursor on
+*** IN 30 (Graphic common control) = 0    ; display_page_memory=0, write_page_memory=0, write_mode_xor_nor=0, format_0=0, format_1=0, gdpint_read_only=0, avdint_read_only=0, scroll_mode=0
+*** IN 30 (Graphic common control) = 0    ; display_page_memory=0, write_page_memory=0, write_mode_xor_nor=0, format_0=0, format_1=0, gdpint_read_only=0, avdint_read_only=0, scroll_mode=0
+*** IN 30 (Graphic common control) = 0    ; display_page_memory=0, write_page_memory=0, write_mode_xor_nor=0, format_0=0, format_1=0, gdpint_read_only=0, avdint_read_only=0, scroll_mode=0
+>>> B544	OUT	(#30),A
+*** OUT 30 (Graphic common control) = 0    ; display_page_memory=0, write_page_memory=0, write_mode_xor_nor=0, format_0=0, format_1=0, gdpint_read_only=0, avdint_read_only=0, scroll_mode=0
+*** IN 36 (Common input/Graphic scroll) = 4E    ; bit0_undefined=0, bit1_undefined=1, bit2_undefined=1, bit3_undefined=1, avdc_access_flag=0, bit5_undefined=0, bit6_undefined=1, graph_pix_input=0
+*** IN 39 (AVDC status/command) = 20    ; split_scr2_int=0, ready_int=0, split_scr1_int=0, line_zero_int=0, vb_int=0, ready_flag=1, bit6_reserved=0, bit7_reserved=0
+>>> A6BC	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = 30    ; instantaneous: cursor off
+>>> A6BF	OUT	(#34),A
+*** OUT 34 (Character register) = 41            ; A>    ; character 'A'
+>>> A6C5	OUT	(#35),A
+*** OUT 35 (Attribute register) = 0    ; blink=0, underline=0, special_character=0, protect=0, highlight_red_foreground=0, reverse_video_green_background=0, gp2_blue_background=0, gp1_red_background=0
+>>> A6C8	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB    ; delayed: write at cursor address and increment
+>>> A6CC	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = 35    ; instantaneous: cursor on
+*** IN 36 (Common input/Graphic scroll) = 4E    ; bit0_undefined=0, bit1_undefined=1, bit2_undefined=1, bit3_undefined=1, avdc_access_flag=0, bit5_undefined=0, bit6_undefined=1, graph_pix_input=0
+*** IN 39 (AVDC status/command) = 20    ; split_scr2_int=0, ready_int=0, split_scr1_int=0, line_zero_int=0, vb_int=0, ready_flag=1, bit6_reserved=0, bit7_reserved=0
+>>> A6BC	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = 30    ; instantaneous: cursor off
+>>> A6BF	OUT	(#34),A
+*** OUT 34 (Character register) = 3E    ; character '>'
+>>> A6C5	OUT	(#35),A
+*** OUT 35 (Attribute register) = 0    ; blink=0, underline=0, special_character=0, protect=0, highlight_red_foreground=0, reverse_video_green_background=0, gp2_blue_background=0, gp1_red_background=0
+>>> A6C8	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB    ; delayed: write at cursor address and increment
+>>> A6CC	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = 35    ; instantaneous: cursor on
