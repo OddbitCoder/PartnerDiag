@@ -288,9 +288,12 @@ test_wait_39_ready_2:
 	LD	HL, 1000
 	CALL	msleep
 
+	LD	A, '#'
+	CALL	write_char
+
 	HALT
 
-; Sleep HL milliseconds
+; Sleep HL milliseconds.
 msleep:
 msl_loop:
     LD      B, 233
