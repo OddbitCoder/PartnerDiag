@@ -250,23 +250,31 @@ write_string_ret_2:
 	LD	HL, 1000
 	CALL	msleep
 
-; Test block 8 ; THIS FAILS - BAD MEMORY?
-	LD	A, $1A
-	OUT	($39), A
-	LD	A, $FF
-	OUT	($38), A
-	LD	A, $0F
-	OUT	($38), A
-	LD	A, $20
-	OUT	($34), A
-	XOR	A
-	OUT	($35), A
-	LD	A, $BB
+; Test block 7.5 (delayed command sanity check)
+	LD	A, $A9
 	OUT	($39), A
 	LD	A, '*'
 	CALL	write_char
 	LD	HL, 1000
 	CALL	msleep
+
+; Test block 8 ; THIS FAILS - BAD MEMORY?
+;	LD	A, $1A
+;	OUT	($39), A
+;	LD	A, $FF
+;	OUT	($38), A
+;	LD	A, $0F
+;	OUT	($38), A
+;	LD	A, $20
+;	OUT	($34), A
+;	XOR	A
+;	OUT	($35), A
+;	LD	A, $BB
+;	OUT	($39), A
+;	LD	A, '*'
+;	CALL	write_char
+;	LD	HL, 1000
+;	CALL	msleep
 
 ; Test block 9 (explicit code from trace)
 test_wait_39_ready_1:
