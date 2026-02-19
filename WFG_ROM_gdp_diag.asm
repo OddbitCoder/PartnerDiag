@@ -147,16 +147,21 @@ line_break_ret_2:
 write_string_ret_2:
 
 ; GDP diagnostics.
+	LD	A, '*'
+	CALL	write_char
+	LD	HL, 5000
+	CALL	msleep
+
 	CALL	avdc_reset
 	LD	A, '*'
 	CALL	write_char
-	LD	HL, 1000
+	LD	HL, 5000
 	CALL	msleep
 
 	CALL avdc_clear_screen
 	LD	A, '*'
 	CALL	write_char
-	LD	HL, 1000
+	LD	HL, 5000
 	CALL	msleep
 
 	LD	A, '#'
