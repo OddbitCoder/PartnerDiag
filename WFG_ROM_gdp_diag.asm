@@ -291,7 +291,7 @@ avdc_reset_wait_access_low:
 	OUT	($39), A
 
 ; Set common text attributes.
-	LD	A, $65
+	LD	A, $C4
 	OUT	($32), A
 
 ; Wait for V blanking edge on GDP status bit 1.
@@ -374,7 +374,7 @@ data_avdc_init:
 
 ; AVDC init sequence used by avdc_reset.
 data_avdc_init_reset:
-	DB	$D0, $2F, $8D, $05, $99, $4F, $0A, $EA
+	DB	$D0, $3E, $BF, $05, $99, $83, $0B, $EA
 	DB	$00, $30
 
 ; GDP command string that moves the pen to the bottom-left corner and clears the line.
