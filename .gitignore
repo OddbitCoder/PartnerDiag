@@ -2,3 +2,6 @@
 *.lst
 *.obj
 *.autosave*
+boot.log
+logs/boot.log
+logs/boot.log/

@@ -1,0 +1,960 @@
+>>> 172	OUT	(#31),A
+*** OUT 31 (PIO port A control register) = 7
+>>> 174	OUT	(#33),A
+*** OUT 33 (PIO port B control register) = 7
+>>> 178	OUT	(#31),A
+*** OUT 31 (PIO port A control register) = F
+>>> 17A	OUT	(#33),A
+*** OUT 33 (PIO port B control register) = F
+>>> 17E	OUT	(#30),A
+*** OUT 30 (Graphic common control) = 18
+>>> 182	OUT	(#32),A
+*** OUT 32 (Common text attributes) = 6D
+>>> 185	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = 0
+>>> 187	OUT	(#36),A
+*** OUT 36 (Common input/Graphic scroll) = 0
+>>> 18D	OUT	(#21),A
+*** OUT 21 (GDP control register 1) = 0
+>>> 191	OUT	(#21),A
+*** OUT 21 (GDP control register 1) = 3
+*** IN 20 (GDP status/command) = 7
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = 4
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = 5
+>>> 19E	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = 0
+>>> 1A0	OUT	(#30),A
+*** OUT 30 (Graphic common control) = 0
+>>> 264	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = 0
+>>> 273	OUT	(#3E),A
+*** OUT 3E (AVDC screen start 2 lower) = 0
+>>> 275	OUT	(#3F),A
+*** OUT 3F (AVDC screen start 2 upper) = 0
+>>> 277	OUT	(#3A),A
+*** OUT 3A (AVDC screen start 1 lower) = 0
+>>> 279	OUT	(#3B),A
+*** OUT 3B (AVDC screen start 1 upper) = 0
+>>> 27D	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = 10
+*** OUT 38 (AVDC interrupt register/init registers) = D0
+*** OUT 38 (AVDC interrupt register/init registers) = 2F
+*** OUT 38 (AVDC interrupt register/init registers) = D
+*** OUT 38 (AVDC interrupt register/init registers) = 5
+*** OUT 38 (AVDC interrupt register/init registers) = 99
+*** OUT 38 (AVDC interrupt register/init registers) = 4F
+*** OUT 38 (AVDC interrupt register/init registers) = A
+*** OUT 38 (AVDC interrupt register/init registers) = EA
+*** OUT 38 (AVDC interrupt register/init registers) = 0
+*** OUT 38 (AVDC interrupt register/init registers) = 30
+>>> 288	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = 3D
+>>> 28B	OUT	(#3D),A
+*** OUT 3D (AVDC cursor address upper) = 0
+>>> 28D	OUT	(#3C),A
+*** OUT 3C (AVDC cursor address lower) = 0
+>>> 2A3	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = 1A
+>>> 2A6	OUT	(#38),A
+*** OUT 38 (AVDC interrupt register/init registers) = FF
+>>> 2A9	OUT	(#38),A
+*** OUT 38 (AVDC interrupt register/init registers) = 1F
+>>> 297	OUT	(#34),A
+*** OUT 34 (Character register) = 20
+>>> 29A	OUT	(#35),A
+*** OUT 35 (Attribute register) = 0
+>>> 29E	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = BB
+>>> 1C8	OUT	(#2B),A
+*** OUT 2B (GDP Ypos LSBs) = 64
+*** IN 20 (GDP status/command) = 5
+>>> CA	OUT	(#36),A
+*** OUT 36 (Common input/Graphic scroll) = F4
+*** IN 20 (GDP status/command) = 5
+>>> 24A	OUT	(#23),A
+*** OUT 23 (GDP character size register) = 3
+>>> 24E	OUT	(#22),A
+*** OUT 22 (GDP control register 2) = 0
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = 5
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = 1
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = B
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = B
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = B
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = B
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = B
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = B
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = B
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = B
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = B
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = B
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = B
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = B
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = B
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = B
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = B
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = B
+*** IN 20 (GDP status/command) = D
+>>> 24A	OUT	(#23),A
+*** OUT 23 (GDP character size register) = 21
+>>> 24E	OUT	(#22),A
+*** OUT 22 (GDP control register 2) = 0
+*** IN 20 (GDP status/command) = D
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = D
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = 0
+*** IN 20 (GDP status/command) = 5
+>>> 24A	OUT	(#23),A
+*** OUT 23 (GDP character size register) = A8
+>>> 24E	OUT	(#22),A
+*** OUT 22 (GDP control register 2) = 0
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = 44
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = 65
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = 6C
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = 74
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = 61
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = 20
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = 50
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = 61
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = 72
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = 74
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = 6E
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = 65
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = 72
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = 20
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = 47
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = 44
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = 50
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = 5
+*** IN 20 (GDP status/command) = 5
+>>> CA	OUT	(#36),A
+*** OUT 36 (Common input/Graphic scroll) = E8
+*** IN 20 (GDP status/command) = 5
+>>> 24A	OUT	(#23),A
+*** OUT 23 (GDP character size register) = 3
+>>> 24E	OUT	(#22),A
+*** OUT 22 (GDP control register 2) = 0
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = 5
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = 1
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = B
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = B
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = B
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = B
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = B
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = B
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = B
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = B
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = B
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = B
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = B
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = B
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = B
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = B
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = B
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = B
+*** IN 20 (GDP status/command) = D
+>>> 24A	OUT	(#23),A
+*** OUT 23 (GDP character size register) = 21
+>>> 24E	OUT	(#22),A
+*** OUT 22 (GDP control register 2) = 0
+*** IN 20 (GDP status/command) = D
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = D
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = 0
+*** IN 20 (GDP status/command) = 5
+>>> 24A	OUT	(#23),A
+*** OUT 23 (GDP character size register) = 21
+>>> 24E	OUT	(#22),A
+*** OUT 22 (GDP control register 2) = 0
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = 5B
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = 20
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = 42
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = 6F
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = 6F
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = 74
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = 20
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = 56
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = 20
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = 31
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = 2E
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = 31
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = 20
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = 2D
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = 20
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = 57
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = 46
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = 20
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = 5D
+*** IN 20 (GDP status/command) = 5
+>>> CA	OUT	(#36),A
+*** OUT 36 (Common input/Graphic scroll) = DC
+*** IN 20 (GDP status/command) = 5
+>>> 24A	OUT	(#23),A
+*** OUT 23 (GDP character size register) = 3
+>>> 24E	OUT	(#22),A
+*** OUT 22 (GDP control register 2) = 0
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = 5
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = 1
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = B
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = B
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = B
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = B
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = B
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = B
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = B
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = B
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = B
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = B
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = B
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = B
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = B
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = B
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = B
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = B
+*** IN 20 (GDP status/command) = D
+>>> 24A	OUT	(#23),A
+*** OUT 23 (GDP character size register) = 21
+>>> 24E	OUT	(#22),A
+*** OUT 22 (GDP control register 2) = 0
+*** IN 20 (GDP status/command) = D
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = D
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = 0
+*** IN 20 (GDP status/command) = 5
+>>> 24A	OUT	(#23),A
+*** OUT 23 (GDP character size register) = 21
+>>> 24E	OUT	(#22),A
+*** OUT 22 (GDP control register 2) = 0
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = 54    ; TESTING MEMORY ...
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = 45
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = 53
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = 54
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = 49
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = 4E
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = 47
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = 20
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = 4D
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = 45
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = 4D
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = 4F
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = 52
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = 59
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = 20
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = 2E
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = 2E
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = 2E
+*** IN 20 (GDP status/command) = 5
+>>> AF	OUT	(#20),A
+*** OUT 20 (GDP status/command) = 20
+                                                ; WE "LEAVE" EPROM HERE
+>>> 8606	OUT	(#33),A
+*** OUT 33 (PIO port B control register) = 7
+>>> 8608	OUT	(#31),A
+*** OUT 31 (PIO port A control register) = 7
+>>> 861A	OUT	(#31),A
+*** OUT 31 (PIO port A control register) = B0
+>>> 8620	OUT	(#33),A
+*** OUT 33 (PIO port B control register) = B2
+*** OUT 31 (PIO port A control register) = 7
+*** OUT 31 (PIO port A control register) = F
+*** OUT 30 (Graphic common control) = 0
+>>> AD46	OUT	(#30),A
+*** OUT 30 (Graphic common control) = 0
+>>> AD48	OUT	(#36),A
+*** OUT 36 (Common input/Graphic scroll) = 0
+*** IN 30 (Graphic common control) = 0
+>>> AD5B	OUT	(#30),A
+*** OUT 30 (Graphic common control) = 0
+*** IN 30 (Graphic common control) = 0
+*** IN 2F (GDP status (no interrupt reset)) = 7
+>>> B522	OUT	(#30),A
+*** OUT 30 (Graphic common control) = 3
+>>> AD64	OUT	(#20),A
+*** OUT 20 (GDP status/command) = 4
+*** IN 30 (Graphic common control) = 3
+*** IN 2F (GDP status (no interrupt reset)) = 5
+>>> B522	OUT	(#30),A
+*** OUT 30 (Graphic common control) = 0
+>>> AD6D	OUT	(#21),A
+*** OUT 21 (GDP control register 1) = 3
+>>> AD71	OUT	(#20),A
+*** OUT 20 (GDP status/command) = 4
+*** IN 2F (GDP status (no interrupt reset)) = 5
+>>> B505	OUT	(#20),A
+*** OUT 20 (GDP status/command) = 5
+*** OUT 33 (PIO port B control register) = 7
+*** OUT 33 (PIO port B control register) = F
+*** OUT 33 (PIO port B control register) = 7
+>>> A3AF	OUT	(#32),A
+*** OUT 32 (Common text attributes) = 65
+>>> A3BE	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = 0
+>>> A3C4	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = 0
+*** IN 20 (GDP status/command) = 5  [x2188]
+*** IN 20 (GDP status/command) = 7
+*** IN 20 (GDP status/command) = 5
+>>> AAD7	OUT	(#3E),A
+*** OUT 3E (AVDC screen start 2 lower) = 0
+>>> AAD9	OUT	(#3F),A
+*** OUT 3F (AVDC screen start 2 upper) = 0
+>>> AADD	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = 10
+*** OUT 38 (AVDC interrupt register/init registers) = D0
+*** OUT 38 (AVDC interrupt register/init registers) = 2F
+*** OUT 38 (AVDC interrupt register/init registers) = 8D
+*** OUT 38 (AVDC interrupt register/init registers) = 5
+*** OUT 38 (AVDC interrupt register/init registers) = 99
+*** OUT 38 (AVDC interrupt register/init registers) = 4F
+*** OUT 38 (AVDC interrupt register/init registers) = A
+*** OUT 38 (AVDC interrupt register/init registers) = EA
+*** OUT 38 (AVDC interrupt register/init registers) = 0
+*** OUT 38 (AVDC interrupt register/init registers) = 30
+>>> AAA9	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = 1C
+*** OUT 38 (AVDC interrupt register/init registers) = 0
+*** OUT 38 (AVDC interrupt register/init registers) = 17
+*** OUT 38 (AVDC interrupt register/init registers) = 0
+>>> A3D3	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = 3D
+>>> A3D6	OUT	(#3D),A
+*** OUT 3D (AVDC cursor address upper) = 0
+>>> A3D8	OUT	(#3C),A
+*** OUT 3C (AVDC cursor address lower) = 0
+>>> AA81	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = 1A
+>>> AA84	OUT	(#38),A
+*** OUT 38 (AVDC interrupt register/init registers) = FF
+>>> AA87	OUT	(#38),A
+*** OUT 38 (AVDC interrupt register/init registers) = F
+>>> A3E2	OUT	(#34),A
+*** OUT 34 (Character register) = 20
+>>> A3E5	OUT	(#35),A
+*** OUT 35 (Attribute register) = 0
+>>> A3E9	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = BB
+*** IN 39 (AVDC status/command) = 20
+*** IN 36 (Common input/Graphic scroll) = 5F
+*** IN 36 (Common input/Graphic scroll) = 5E
+*** IN 36 (Common input/Graphic scroll) = 4E
+*** IN 39 (AVDC status/command) = 20
+>>> AA8F	OUT	(#3C),A
+*** OUT 3C (AVDC cursor address lower) = 0
+>>> AA92	OUT	(#3D),A
+*** OUT 3D (AVDC cursor address upper) = 0
+*** IN 36 (Common input/Graphic scroll) = 5E
+*** IN 36 (Common input/Graphic scroll) = 4F
+*** IN 39 (AVDC status/command) = 20
+*** OUT 34 (Character register) = C2
+>>> AB0E	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB
+*** IN 39 (AVDC status/command) = 20
+*** OUT 34 (Character register) = 1
+>>> AB17	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB
+*** IN 39 (AVDC status/command) = 20
+*** OUT 34 (Character register) = 46
+>>> AB0E	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB
+*** IN 39 (AVDC status/command) = 20
+*** OUT 34 (Character register) = 2
+>>> AB17	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB
+*** IN 39 (AVDC status/command) = 20
+*** OUT 34 (Character register) = CA
+>>> AB0E	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB
+*** IN 39 (AVDC status/command) = 20
+*** OUT 34 (Character register) = 2
+>>> AB17	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB
+*** IN 36 (Common input/Graphic scroll) = 4E
+*** IN 36 (Common input/Graphic scroll) = 4F
+*** IN 36 (Common input/Graphic scroll) = 4E
+*** IN 36 (Common input/Graphic scroll) = 5E
+*** IN 36 (Common input/Graphic scroll) = 4E
+*** IN 39 (AVDC status/command) = 20
+*** OUT 34 (Character register) = 4E
+>>> AB0E	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB
+*** IN 39 (AVDC status/command) = 20
+*** OUT 34 (Character register) = 3
+>>> AB17	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB
+*** IN 39 (AVDC status/command) = 20
+*** OUT 34 (Character register) = D2
+>>> AB0E	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB
+*** IN 39 (AVDC status/command) = 20
+*** OUT 34 (Character register) = 3
+>>> AB17	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB
+*** IN 39 (AVDC status/command) = 20
+*** OUT 34 (Character register) = 56
+>>> AB0E	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB
+*** IN 39 (AVDC status/command) = 20
+*** OUT 34 (Character register) = 4
+>>> AB17	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB
+*** IN 36 (Common input/Graphic scroll) = 5E  [x3]
+*** IN 36 (Common input/Graphic scroll) = 4F
+*** IN 39 (AVDC status/command) = 20
+*** OUT 34 (Character register) = DA
+>>> AB0E	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB
+*** IN 39 (AVDC status/command) = 20
+*** OUT 34 (Character register) = 4
+>>> AB17	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB
+*** IN 39 (AVDC status/command) = 20
+*** OUT 34 (Character register) = 5E
+>>> AB0E	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB
+*** IN 39 (AVDC status/command) = 20
+*** OUT 34 (Character register) = 5
+>>> AB17	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB
+*** IN 39 (AVDC status/command) = 20
+*** OUT 34 (Character register) = E2
+>>> AB0E	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB
+*** IN 39 (AVDC status/command) = 20
+*** OUT 34 (Character register) = 5
+>>> AB17	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB
+*** IN 36 (Common input/Graphic scroll) = 4E
+*** IN 36 (Common input/Graphic scroll) = 5F
+*** IN 36 (Common input/Graphic scroll) = 4E
+*** IN 39 (AVDC status/command) = 20
+*** OUT 34 (Character register) = 66
+>>> AB0E	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB
+*** IN 39 (AVDC status/command) = 20
+*** OUT 34 (Character register) = 6
+>>> AB17	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB
+*** IN 39 (AVDC status/command) = 20
+*** OUT 34 (Character register) = EA
+>>> AB0E	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB
+*** IN 39 (AVDC status/command) = 20
+*** OUT 34 (Character register) = 6
+>>> AB17	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB
+*** IN 39 (AVDC status/command) = 20
+*** OUT 34 (Character register) = 6E
+>>> AB0E	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB
+*** IN 39 (AVDC status/command) = 20
+*** OUT 34 (Character register) = 7
+>>> AB17	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB
+*** IN 36 (Common input/Graphic scroll) = 5F  [x2]
+*** IN 36 (Common input/Graphic scroll) = 5E  [x2]
+*** IN 36 (Common input/Graphic scroll) = 4E
+*** IN 39 (AVDC status/command) = 20
+*** OUT 34 (Character register) = F2
+>>> AB0E	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB
+*** IN 39 (AVDC status/command) = 20
+*** OUT 34 (Character register) = 7
+>>> AB17	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB
+*** IN 39 (AVDC status/command) = 20
+*** OUT 34 (Character register) = 76
+>>> AB0E	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB
+*** IN 39 (AVDC status/command) = 20
+*** OUT 34 (Character register) = 8
+>>> AB17	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB
+*** IN 39 (AVDC status/command) = 20
+*** OUT 34 (Character register) = FA
+>>> AB0E	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB
+*** IN 39 (AVDC status/command) = 20
+*** OUT 34 (Character register) = 8
+>>> AB17	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB
+*** IN 36 (Common input/Graphic scroll) = 5E
+*** IN 36 (Common input/Graphic scroll) = 4E
+*** IN 39 (AVDC status/command) = 20
+*** OUT 34 (Character register) = 7E
+>>> AB0E	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB
+*** IN 39 (AVDC status/command) = 20
+*** OUT 34 (Character register) = 9
+>>> AB17	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB
+*** IN 39 (AVDC status/command) = 20
+*** OUT 34 (Character register) = 2
+>>> AB0E	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB
+*** IN 39 (AVDC status/command) = 20
+*** OUT 34 (Character register) = A
+>>> AB17	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB
+*** IN 39 (AVDC status/command) = 20
+*** OUT 34 (Character register) = 86
+>>> AB0E	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB
+*** IN 39 (AVDC status/command) = 20
+*** OUT 34 (Character register) = A
+>>> AB17	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB
+*** IN 36 (Common input/Graphic scroll) = 4E
+*** IN 36 (Common input/Graphic scroll) = 5F  [x2]
+*** IN 36 (Common input/Graphic scroll) = 4F
+*** IN 39 (AVDC status/command) = 20
+*** OUT 34 (Character register) = A
+>>> AB0E	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB
+*** IN 39 (AVDC status/command) = 20
+*** OUT 34 (Character register) = B
+>>> AB17	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB
+*** IN 39 (AVDC status/command) = 20
+*** OUT 34 (Character register) = 8E
+>>> AB0E	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB
+*** IN 39 (AVDC status/command) = 20
+*** OUT 34 (Character register) = B
+>>> AB17	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB
+*** IN 39 (AVDC status/command) = 20
+*** OUT 34 (Character register) = 12
+>>> AB0E	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB
+*** IN 39 (AVDC status/command) = 20
+*** OUT 34 (Character register) = C
+>>> AB17	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB
+*** IN 36 (Common input/Graphic scroll) = 4F
+*** IN 36 (Common input/Graphic scroll) = 4E
+*** IN 36 (Common input/Graphic scroll) = 4F  [x4]
+*** IN 36 (Common input/Graphic scroll) = 5F
+*** IN 36 (Common input/Graphic scroll) = 4E
+*** IN 39 (AVDC status/command) = 20
+*** OUT 34 (Character register) = 96
+>>> AB0E	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB
+*** IN 39 (AVDC status/command) = 20
+*** OUT 34 (Character register) = C
+>>> AB17	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB
+*** IN 39 (AVDC status/command) = 20
+*** OUT 34 (Character register) = 1A
+>>> AB0E	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB
+*** IN 39 (AVDC status/command) = 20
+*** OUT 34 (Character register) = D
+>>> AB17	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB
+*** IN 39 (AVDC status/command) = 20
+*** OUT 34 (Character register) = 9E
+>>> AB0E	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB
+*** IN 39 (AVDC status/command) = 20
+*** OUT 34 (Character register) = D
+>>> AB17	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB
+*** IN 36 (Common input/Graphic scroll) = 4E  [x3]
+*** IN 36 (Common input/Graphic scroll) = 4F
+*** IN 36 (Common input/Graphic scroll) = 5E
+*** IN 36 (Common input/Graphic scroll) = 4E
+*** IN 39 (AVDC status/command) = 20
+*** OUT 34 (Character register) = 22
+>>> AB0E	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB
+*** IN 39 (AVDC status/command) = 20
+*** OUT 34 (Character register) = E
+>>> AB17	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB
+*** IN 39 (AVDC status/command) = 20
+*** OUT 34 (Character register) = A6
+>>> AB0E	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB
+*** IN 39 (AVDC status/command) = 20
+*** OUT 34 (Character register) = E
+>>> AB17	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB
+*** IN 39 (AVDC status/command) = 20
+*** OUT 34 (Character register) = 2A
+>>> AB0E	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB
+*** IN 39 (AVDC status/command) = 20
+*** OUT 34 (Character register) = F
+>>> AB17	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB
+>>> A3F9	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = 35
+*** IN 36 (Common input/Graphic scroll) = 4F
+>>> AB82	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = 30
+*** IN 36 (Common input/Graphic scroll) = 5F
+*** IN 36 (Common input/Graphic scroll) = 4E
+*** IN 39 (AVDC status/command) = 20
+>>> AA8F	OUT	(#3C),A
+*** OUT 3C (AVDC cursor address lower) = C2
+>>> AA92	OUT	(#3D),A
+*** OUT 3D (AVDC cursor address upper) = 1
+*** IN 36 (Common input/Graphic scroll) = 5E
+*** IN 36 (Common input/Graphic scroll) = 4F
+>>> AB8D	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = 35
+*** IN 32 (Common text attributes) = 65
+>>> AA06	OUT	(#32),A
+*** OUT 32 (Common text attributes) = 65
+*** IN 36 (Common input/Graphic scroll) = 4F
+*** IN 39 (AVDC status/command) = 20
+>>> A9BE	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = 0
+*** IN 36 (Common input/Graphic scroll) = 5F
+*** IN 36 (Common input/Graphic scroll) = 4E
+*** IN 39 (AVDC status/command) = 20
+>>> A9D7	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = 0
+*** IN 32 (Common text attributes) = 65
+>>> A9E2	OUT	(#32),A
+*** OUT 32 (Common text attributes) = 65
+*** IN 20 (GDP status/command) = 5  [x2358]
+*** IN 20 (GDP status/command) = 7
+*** IN 20 (GDP status/command) = 5
+>>> AAD7	OUT	(#3E),A
+*** OUT 3E (AVDC screen start 2 lower) = 0
+>>> AAD9	OUT	(#3F),A
+*** OUT 3F (AVDC screen start 2 upper) = 0
+>>> AADD	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = 10
+*** OUT 38 (AVDC interrupt register/init registers) = D0
+*** OUT 38 (AVDC interrupt register/init registers) = 2F
+*** OUT 38 (AVDC interrupt register/init registers) = 8D
+*** OUT 38 (AVDC interrupt register/init registers) = 5
+*** OUT 38 (AVDC interrupt register/init registers) = 99
+*** OUT 38 (AVDC interrupt register/init registers) = 4F
+*** OUT 38 (AVDC interrupt register/init registers) = A
+*** OUT 38 (AVDC interrupt register/init registers) = EA
+*** OUT 38 (AVDC interrupt register/init registers) = 0
+*** OUT 38 (AVDC interrupt register/init registers) = 30
+>>> A9E8	OUT	(#3E),A
+*** OUT 3E (AVDC screen start 2 lower) = 0
+>>> A9EA	OUT	(#3F),A
+*** OUT 3F (AVDC screen start 2 upper) = 0
+>>> A9F1	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = 3D
+*** IN 2F (GDP status (no interrupt reset)) = 5
+>>> AD9F	OUT	(#29),A
+*** OUT 29 (GDP Xpos LSBs) = FF
+>>> ADA3	OUT	(#28),A
+*** OUT 28 (GDP Xpos MSBs) = 3
+*** IN 30 (Graphic common control) = 0
+>>> ADAD	OUT	(#2B),A
+*** OUT 2B (GDP Ypos LSBs) = 0
+>>> ADB0	OUT	(#2A),A
+*** OUT 2A (GDP Ypos MSBs) = 0
+*** IN 2F (GDP status (no interrupt reset)) = 5
+*** IN 30 (Graphic common control) = 0
+>>> ADE9	OUT	(#23),A
+*** OUT 23 (GDP character size register) = 22
+*** IN 22 (GDP control register 2) = 0
+>>> ADF7	OUT	(#22),A
+*** OUT 22 (GDP control register 2) = 8
+*** IN 2F (GDP status (no interrupt reset)) = 5
+*** OUT 20 (GDP status/command) = 50                  ; Partner Gdp V 1.0 wf
+*** IN 2F (GDP status (no interrupt reset)) = 5
+*** OUT 20 (GDP status/command) = 61
+*** IN 2F (GDP status (no interrupt reset)) = 5
+*** OUT 20 (GDP status/command) = 72
+*** IN 2F (GDP status (no interrupt reset)) = 5
+*** OUT 20 (GDP status/command) = 74
+*** IN 2F (GDP status (no interrupt reset)) = 5
+*** OUT 20 (GDP status/command) = 6E
+*** IN 2F (GDP status (no interrupt reset)) = 5
+*** OUT 20 (GDP status/command) = 65
+*** IN 2F (GDP status (no interrupt reset)) = 5
+*** OUT 20 (GDP status/command) = 72
+*** IN 2F (GDP status (no interrupt reset)) = 5
+*** OUT 20 (GDP status/command) = 20
+*** IN 2F (GDP status (no interrupt reset)) = 5
+*** OUT 20 (GDP status/command) = 47
+*** IN 2F (GDP status (no interrupt reset)) = 5
+*** OUT 20 (GDP status/command) = 64
+*** IN 2F (GDP status (no interrupt reset)) = 5
+*** OUT 20 (GDP status/command) = 70
+*** IN 2F (GDP status (no interrupt reset)) = 5
+*** OUT 20 (GDP status/command) = 20
+*** IN 2F (GDP status (no interrupt reset)) = 5
+*** OUT 20 (GDP status/command) = 56
+*** IN 2F (GDP status (no interrupt reset)) = 5
+*** OUT 20 (GDP status/command) = 20
+*** IN 2F (GDP status (no interrupt reset)) = 5
+*** OUT 20 (GDP status/command) = 31
+*** IN 2F (GDP status (no interrupt reset)) = 5
+*** OUT 20 (GDP status/command) = 2E
+*** IN 2F (GDP status (no interrupt reset)) = 5
+*** OUT 20 (GDP status/command) = 30
+*** IN 2F (GDP status (no interrupt reset)) = 5
+*** OUT 20 (GDP status/command) = 20
+*** IN 2F (GDP status (no interrupt reset)) = 5
+*** OUT 20 (GDP status/command) = 77
+*** IN 2F (GDP status (no interrupt reset)) = 5
+*** OUT 20 (GDP status/command) = 66
+*** IN 30 (Graphic common control) = 0
+*** IN 2F (GDP status (no interrupt reset)) = 5
+>>> B544	OUT	(#30),A
+*** OUT 30 (Graphic common control) = 0
+>>> 8846	OUT	(#23),A
+*** OUT 23 (GDP character size register) = 21
+>>> 8849	OUT	(#22),A
+*** OUT 22 (GDP control register 2) = 0
+*** IN 36 (Common input/Graphic scroll) = 4E
+*** IN 39 (AVDC status/command) = 20
+>>> A6BC	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = 30
+>>> A6BF	OUT	(#34),A
+*** OUT 34 (Character register) = 41            ; A>
+>>> A6C5	OUT	(#35),A
+*** OUT 35 (Attribute register) = 0
+>>> A6C8	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB
+>>> A6CC	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = 35
+*** IN 36 (Common input/Graphic scroll) = 4E
+*** IN 39 (AVDC status/command) = 20
+>>> A6BC	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = 30
+>>> A6BF	OUT	(#34),A
+*** OUT 34 (Character register) = 3E
+>>> A6C5	OUT	(#35),A
+*** OUT 35 (Attribute register) = 0
+>>> A6C8	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = AB
+>>> A6CC	OUT	(#39),A
+*** OUT 39 (AVDC status/command) = 35
